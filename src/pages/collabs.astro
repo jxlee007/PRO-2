@@ -2,55 +2,56 @@
 import Layout from "../layouts/Layout.astro";
 import Nav from "../components/Nav.astro";
 import Footer from "../components/Footer.astro";
+import { withBase } from "../lib/utils";
 
 const collabs = [
 	{
 		title: "pm ♦ theory 11",
 		subtitle: "privacy playing cards",
-		image: "/images/collabs/collab-pg-1.jpg",
+		image: withBase("/images/collabs/collab-pg-1.jpg"),
 		href: "#",
 	},
 	{
 		title: "pm X nomantic",
 		subtitle: "camera bags",
-		image: "/images/collabs/collab-pg-2.jpg",
+		image: withBase("/images/collabs/collab-pg-2.jpg"),
 		href: "#",
 	},
 	{
 		title: "pm X polar pro",
 		subtitle: "premium lens filters",
-		image: "/images/collabs/collab-pg-3.jpg",
+		image: withBase("/images/collabs/collab-pg-3.jpg"),
 		href: "#",
 	},
 	{
 		title: "pm X clocks + colours",
 		subtitle: "premium lens filters",
-		image: "/images/collabs/collab-pg-4.jpg",
+		image: withBase("/images/collabs/collab-pg-4.jpg"),
 		href: "#",
 	},
 	{
 		title: "pm X james coffee",
 		subtitle: "signature coffee & merch",
-		image: "/images/collabs/collab-pg-5.jpg",
+		image: withBase("/images/collabs/collab-pg-5.jpg"),
 		href: "#",
 	},
 	{
 		title: "pm X angels and airways",
 		subtitle: "documentary coming-soon",
-		image: "/images/collabs/collab-pg-6.jpg",
+		image: withBase("/images/collabs/collab-pg-6.jpg"),
 		href: "#",
 	},
 	{
 		title: "pm X royal\ncanadian mint",
 		subtitle: "moraine lake coin",
-		image: "/images/collabs/collab-pg-7.jpg",
+		image: withBase("/images/collabs/collab-pg-7.jpg"),
 		href: "#",
 	},
 ];
 ---
 
 <Layout title="Collabs">
-	<Nav logo="/images/digisign/ds1-black.png" />
+	<Nav logo={withBase("/images/digisign/ds1-black.png")} />
 
 	<main class="px-6 sm:px-12 py-12">
 		<div class="max-w-5xl mx-auto">

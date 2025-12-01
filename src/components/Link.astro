@@ -4,12 +4,27 @@
 
     Simple <a-link> style component: preserves href (redirection) and forwards all other attributes.
     - If target="_blank" and no rel provided, adds "noopener noreferrer".
+    - Automatically prepends base URL for internal links
     - Usage: <Link href="/path" class="...">Label</Link>
 */
+import { withBase } from "../lib/utils";
+
 const props = { ...Astro.props };
-props.href ??= '#';
-if (props.target === '_blank' && !props.rel) props.rel = 'noopener noreferrer';
+props.href ??= "#";
+
+// Only prepend base URL for internal links (not external URLs or anchors)
+if (
+    props.href &&
+    !props.href.startsWith("http") &&
+    !props.href.startsWith("mailto:") &&
+    !props.href.startsWith("tel:")
+) {
+    props.href = withBase(props.href);
+}
+
+if (props.target === "_blank" && !props.rel) props.rel = "noopener noreferrer";
 ---
+
 <a {...props}>
     <slot />
 </a>

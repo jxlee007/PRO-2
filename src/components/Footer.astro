@@ -1,5 +1,6 @@
 ---
 import Link from "../components/Link.astro";
+import { withBase } from "../lib/utils";
 ---
 
 <!--
@@ -91,7 +92,11 @@ import Link from "../components/Link.astro";
 
       <!-- keep the pirate skull link, image expected to be served from public root -->
       <Link href="/pirates-life" class="inline-block" aria-label="Pirate life">
-        <img src="/images/skull.png" style="width: 1.3vw;" alt="pirate" />
+        <img
+          src={withBase("/images/skull.png")}
+          style="width: 1.3vw;"
+          alt="pirate"
+        />
       </Link>
     </div>
   </div>

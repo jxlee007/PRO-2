@@ -3,8 +3,9 @@ import Parallax from "../layouts/Parallax.astro";
 import Footer from "../components/Footer.astro";
 import Link from "../components/Link.astro";
 import Layout from "../layouts/Layout.astro";
+import { withBase } from "../lib/utils";
 
-const logo = "/images/digisign/ds1-white.png";
+const logo = withBase("/images/digisign/ds1-white.png");
 
 // Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
 // Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.

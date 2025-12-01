@@ -1,5 +1,6 @@
 ---
 import Link from "../components/Link.astro";
+import { withBase } from "../lib/utils";
 ---
 
 <!--
@@ -18,7 +19,7 @@ images (pl-11.jpg, pl-2.jpg, etc.) are in the site's `public/` folder.
             class="min-h-screen parallax-window"
             data-parallax="scroll"
             data-bleed="8"
-            data-image-src="/images/parallax/pl-11.jpg"
+            data-image-src={withBase("/images/parallax/pl-11.jpg")}
         >
         </div>
 
@@ -26,7 +27,7 @@ images (pl-11.jpg, pl-2.jpg, etc.) are in the site's `public/` folder.
             class="h-screen flex items-center parallax-window"
             data-parallax="scroll"
             data-bleed="0"
-            data-image-src="/images/parallax/pl-2.jpg"
+            data-image-src={withBase("/images/parallax/pl-2.jpg")}
         >
             <div class="w-full ml-4 mx-auto px-8">
                 <h1
@@ -46,7 +47,7 @@ images (pl-11.jpg, pl-2.jpg, etc.) are in the site's `public/` folder.
             class="h-screen flex items-center parallax-window"
             data-parallax="scroll"
             data-bleed="0"
-            data-image-src="/images/parallax/pl-3.jpg"
+            data-image-src={withBase("/images/parallax/pl-3.jpg")}
         >
             <div class="w-full ml-4 mx-auto px-8">
                 <h1
@@ -54,10 +55,10 @@ images (pl-11.jpg, pl-2.jpg, etc.) are in the site's `public/` folder.
                 >
                     limited edition<br />prints
                 </h1>
-                <a
+                <Link
                     href="/prints"
                     class="pl-2 inline-block text-yellow-400 uppercase font-bold text-base md:text-lg underline"
-                    >shop prints →</a
+                    >shop prints →</Link
                 >
             </div>
         </section>
@@ -66,7 +67,7 @@ images (pl-11.jpg, pl-2.jpg, etc.) are in the site's `public/` folder.
             class="h-screen flex items-center parallax-window"
             data-parallax="scroll"
             data-bleed="0"
-            data-image-src="/images/parallax/pl-4.jpg"
+            data-image-src={withBase("/images/parallax/pl-4.jpg")}
         >
             <div class="w-full ml-4 mx-auto px-8">
                 <h1
@@ -74,10 +75,10 @@ images (pl-11.jpg, pl-2.jpg, etc.) are in the site's `public/` folder.
                 >
                     motion graphics
                 </h1>
-                <a
+                <Link
                     href="/shop/motion-gfx"
                     class="pl-2 inline-block text-yellow-400 uppercase font-bold text-base md:text-lg underline"
-                    >shop motion packs →</a
+                    >shop motion packs →</Link
                 >
             </div>
         </section>
@@ -86,7 +87,7 @@ images (pl-11.jpg, pl-2.jpg, etc.) are in the site's `public/` folder.
             class="h-screen flex items-center parallax-window"
             data-parallax="scroll"
             data-bleed="0"
-            data-image-src="/images/parallax/pl-5.jpg"
+            data-image-src={withBase("/images/parallax/pl-5.jpg")}
         >
             <div class="w-full ml-4 mx-auto px-8">
                 <span class="flex flex-col items-center gap-4">
@@ -109,7 +110,7 @@ images (pl-11.jpg, pl-2.jpg, etc.) are in the site's `public/` folder.
             class="h-screen flex items-center parallax-window"
             data-parallax="scroll"
             data-bleed="0"
-            data-image-src="/images/parallax/pl-last.jpg"
+            data-image-src={withBase("/images/parallax/pl-last.jpg")}
         >
             <div class="w-full ml-4 mx-auto px-8">
                 <h1
@@ -117,10 +118,10 @@ images (pl-11.jpg, pl-2.jpg, etc.) are in the site's `public/` folder.
                 >
                     youtube
                 </h1>
-                <a
+                <Link
                     href="/shop/photo-preset"
                     class="pl-2 inline-block text-yellow-400 uppercase font-bold text-base md:text-lg underline"
-                    >see more vids→</a
+                    >see more vids→</Link
                 >
             </div>
         </section>
