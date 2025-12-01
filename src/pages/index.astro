@@ -1,0 +1,227 @@
+---
+import Parallax from "../layouts/Parallax.astro";
+import Footer from "../components/Footer.astro";
+import Link from "../components/Link.astro";
+import Layout from "../layouts/Layout.astro";
+
+const logo = "/images/digisign/ds1-white.png";
+
+// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
+// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+---
+
+<Layout>
+  <nav class="absolute top-0 left-0 right-0 z-50">
+    <div
+      class="w-full mx-auto flex items-center justify-between px-2 py-6 relative"
+    >
+      <div id="digisign" class="cursor-pointer w-28 z-50">
+        <Link href="/">
+          <img
+            src={logo ?? "/images/digisign/ds1-white.png"}
+            alt="autograph"
+            class="w-full"
+          />
+        </Link>
+      </div>
+
+      <!-- Hamburger Menu Button (Mobile/Tablet Only) -->
+      <button
+        id="hamburger-btn"
+        class="lg:hidden z-50 flex flex-col justify-center items-center w-10 h-10 space-y-1.5 focus:outline-none"
+        aria-label="Toggle menu"
+      >
+        <span
+          class="hamburger-line w-7 h-0.5 bg-white transition-all duration-300"
+        ></span>
+        <span
+          class="hamburger-line w-7 h-0.5 bg-white transition-all duration-300"
+        ></span>
+        <span
+          class="hamburger-line w-7 h-0.5 bg-white transition-all duration-300"
+        ></span>
+      </button>
+
+      <!-- Desktop Navigation (Hidden on Mobile/Tablet) -->
+      <div id="side" class="hidden md:flex items-end space-x-4">
+        <div id="list" class="relative">
+          <Link
+            href="/shop"
+            id="hoverlist"
+            class="uppercase text-white tracking-wide text-sm">shop</Link
+          >
+          <span
+            id="hiddenlist"
+            class="absolute left-0 mt-2 hidden bg-transparent"
+          >
+            <!-- kept for parity with original markup; show via hover JS/CSS if desired -->
+            <Link href="/shop" class="block">all</Link>
+            <Link href="/prints" class="block">prints</Link>
+            <Link href="/shop/photo-preset" class="block">lr presets</Link>
+            <Link href="/shop/luts" class="block">video luts</Link>
+            <Link href="/shop/motion-gfx" class="block">motion gfx</Link>
+            <Link href="/shop/sound-packs" class="block">sound fx</Link>
+            <Link href="/shop/gear" class="block">gear</Link>
+          </span>
+        </div>
+
+        <Link href="/collabs" class="uppercase text-white text-sm">collabs</Link
+        >
+        <Link href="/about" class="uppercase text-white text-sm">about</Link>
+        <Link href="/contact" class="uppercase text-white text-sm">contact</Link
+        >
+      </div>
+    </div>
+
+    <!-- Mobile/Tablet Menu (Slides down from top) -->
+    <div
+      id="mobile-menu"
+      class="lg:hidden fixed top-0 left-0 right-0 bg-black transform -translate-y-full transition-transform duration-500 ease-in-out overflow-hidden"
+    >
+      <div
+        class="flex flex-col items-center justify-center min-h-screen pt-20 pb-10 px-6"
+      >
+        <!-- Main Navigation Links -->
+        <div class="flex flex-col items-center space-y-6 mb-8">
+          <Link
+            href="/shop"
+            class="mobile-menu-link uppercase text-white text-2xl font-light tracking-wider hover:text-yellow-400 transition-colors duration-300"
+            >shop</Link
+          >
+          <Link
+            href="/collabs"
+            class="mobile-menu-link uppercase text-white text-2xl font-light tracking-wider hover:text-yellow-400 transition-colors duration-300"
+            >collabs</Link
+          >
+          <Link
+            href="/about"
+            class="mobile-menu-link uppercase text-white text-2xl font-light tracking-wider hover:text-yellow-400 transition-colors duration-300"
+            >about</Link
+          >
+          <Link
+            href="/contact"
+            class="mobile-menu-link uppercase text-white text-2xl font-light tracking-wider hover:text-yellow-400 transition-colors duration-300"
+            >contact</Link
+          >
+        </div>
+
+        <!-- Shop Submenu -->
+        <div class="border-t border-gray-700 pt-6 w-full max-w-xs">
+          <h3
+            class="uppercase text-yellow-400 text-sm font-bold mb-4 text-center tracking-wider"
+          >
+            Shop Categories
+          </h3>
+          <div class="flex flex-col items-center space-y-3">
+            <Link
+              href="/shop"
+              class="mobile-menu-link text-white text-base hover:text-yellow-400 transition-colors duration-300"
+              >All Products</Link
+            >
+            <Link
+              href="/prints"
+              class="mobile-menu-link text-white text-base hover:text-yellow-400 transition-colors duration-300"
+              >Prints</Link
+            >
+            <Link
+              href="/shop/photo-preset"
+              class="mobile-menu-link text-white text-base hover:text-yellow-400 transition-colors duration-300"
+              >LR Presets</Link
+            >
+            <Link
+              href="/shop/luts"
+              class="mobile-menu-link text-white text-base hover:text-yellow-400 transition-colors duration-300"
+              >Video LUTs</Link
+            >
+            <Link
+              href="/shop/motion-gfx"
+              class="mobile-menu-link text-white text-base hover:text-yellow-400 transition-colors duration-300"
+              >Motion GFX</Link
+            >
+            <Link
+              href="/shop/sound-packs"
+              class="mobile-menu-link text-white text-base hover:text-yellow-400 transition-colors duration-300"
+              >Sound FX</Link
+            >
+            <Link
+              href="/shop/gear"
+              class="mobile-menu-link text-white text-base hover:text-yellow-400 transition-colors duration-300"
+              >Gear</Link
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <script is:inline>
+    // Hamburger menu functionality
+    document.addEventListener("DOMContentLoaded", function () {
+      const hamburgerBtn = document.getElementById("hamburger-btn");
+      const mobileMenu = document.getElementById("mobile-menu");
+      const menuLinks = document.querySelectorAll(".mobile-menu-link");
+      let isMenuOpen = false;
+
+      // Toggle menu
+      hamburgerBtn.addEventListener("click", function () {
+        isMenuOpen = !isMenuOpen;
+
+        if (isMenuOpen) {
+          // Open menu
+          mobileMenu.classList.remove("-translate-y-full");
+          mobileMenu.classList.add("translate-y-0");
+
+          // Animate hamburger to X
+          const lines = hamburgerBtn.querySelectorAll(".hamburger-line");
+          lines[0].style.transform = "rotate(45deg) translateY(10px)";
+          lines[1].style.opacity = "0";
+          lines[2].style.transform = "rotate(-45deg) translateY(-10px)";
+
+          // Prevent body scroll
+          document.body.style.overflow = "hidden";
+        } else {
+          // Close menu
+          mobileMenu.classList.add("-translate-y-full");
+          mobileMenu.classList.remove("translate-y-0");
+
+          // Reset hamburger
+          const lines = hamburgerBtn.querySelectorAll(".hamburger-line");
+          lines[0].style.transform = "none";
+          lines[1].style.opacity = "1";
+          lines[2].style.transform = "none";
+
+          // Restore body scroll
+          document.body.style.overflow = "";
+        }
+      });
+
+      // Close menu when clicking on links
+      menuLinks.forEach((link) => {
+        link.addEventListener("click", function () {
+          if (isMenuOpen) {
+            mobileMenu.classList.add("-translate-y-full");
+            mobileMenu.classList.remove("translate-y-0");
+
+            const lines = hamburgerBtn.querySelectorAll(".hamburger-line");
+            lines[0].style.transform = "none";
+            lines[1].style.opacity = "1";
+            lines[2].style.transform = "none";
+
+            document.body.style.overflow = "";
+            isMenuOpen = false;
+          }
+        });
+      });
+
+      // Close menu on escape key
+      document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape" && isMenuOpen) {
+          hamburgerBtn.click();
+        }
+      });
+    });
+  </script>
+
+  <Parallax />
+  <Footer />
+</Layout>

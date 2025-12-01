@@ -1,0 +1,15 @@
+---
+/*
+    src/components/Link.astro
+
+    Simple <a-link> style component: preserves href (redirection) and forwards all other attributes.
+    - If target="_blank" and no rel provided, adds "noopener noreferrer".
+    - Usage: <Link href="/path" class="...">Label</Link>
+*/
+const props = { ...Astro.props };
+props.href ??= '#';
+if (props.target === '_blank' && !props.rel) props.rel = 'noopener noreferrer';
+---
+<a {...props}>
+    <slot />
+</a>

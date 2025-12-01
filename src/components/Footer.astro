@@ -1,0 +1,98 @@
+---
+import Link from "../components/Link.astro";
+---
+
+<!--
+  Footer.astro
+  Tailwind-based rewrite of the project's footer (newsletter + follow links)
+  Usage: import Footer from '~/components/Footer.astro' and include <Footer /> in a page/layout.
+  Assumes Tailwind is configured in the Astro project and Remixicon is available globally (or include the CDN in the page head).
+-->
+<footer
+  id="abt"
+  class="parallax-window bg-gradient-to-b from-neutral-900 to-black py-12 sm:py-20 px-6 sm:px-12"
+>
+  <div
+    class="max-w-full mx-auto flex flex-col items-center space-y-8 text-white"
+  >
+    <!-- newsletter form -->
+    <div
+      id="form"
+      class="w-full flex flex-col items-center text-center space-y-3"
+    >
+      <h2 class="text-5xl sm:text-3xl font-light capitalize">Newsletter</h2>
+      <p class="text-sm sm:text-base text-gray-300">
+        Get notified when new projects drop.
+      </p>
+
+      <form
+        class="w-full flex flex-col sm:flex-row items-center justify-center gap-3 mt-2"
+        onsubmit="event.preventDefault()"
+      >
+        <label for="t1" class="sr-only">Email address</label>
+        <input
+          type="email"
+          name="email-NL"
+          id="t1"
+          placeholder="Email Address"
+          class="px-4 py-2 w-full sm:w-80 placeholder-gray-400 bg-neutral-800 text-gray-100 border border-neutral-700 rounded focus:outline-none focus:ring-2 focus:ring-yellow-400 transition"
+          aria-label="Email address"
+        />
+
+        <button
+          type="submit"
+          class="px-5 py-3 w-full sm:w-auto border-2 border-neutral-700 bg-neutral-800 text-white uppercase text-sm font-semibold rounded hover:bg-yellow-400 hover:text-black transition-colors duration-200"
+        >
+          Subscribe
+        </button>
+      </form>
+    </div>
+
+    <!-- follow heading -->
+    <div class="text-center">
+      <h1 class="text-3xl sm:text-4xl md:text-5xl font-thin">Follow</h1>
+    </div>
+
+    <!-- social icons -->
+    <!-- ensure you have `import Link from '~/components/Link.astro'` in the frontmatter -->
+    <div class="flex items-center gap-3 sm:gap-4 text-gray-300">
+      <Link
+        href="#"
+        aria-label="YouTube"
+        class="text-3xl sm:text-4xl hover:text-gray-100 transition"
+        target="_blank"
+      >
+        <i class="ri-youtube-fill"></i>
+      </Link>
+      <Link
+        href="#"
+        aria-label="Instagram"
+        class="text-3xl sm:text-4xl hover:text-gray-100 transition"
+        target="_blank"
+      >
+        <i class="ri-instagram-line"></i>
+      </Link>
+      <Link
+        href="#"
+        aria-label="Facebook"
+        class="text-3xl sm:text-4xl hover:text-gray-100 transition"
+        target="_blank"
+      >
+        <i class="ri-facebook-fill"></i>
+      </Link>
+      <Link
+        href="#"
+        aria-label="Twitter"
+        class="text-3xl sm:text-4xl hover:text-gray-100 transition"
+        target="_blank"
+      >
+        <i class="ri-twitter-fill"></i>
+      </Link>
+
+      <!-- keep the pirate skull link, image expected to be served from public root -->
+      <Link href="/pirates-life" class="inline-block" aria-label="Pirate life">
+        <img src="/images/skull.png" style="width: 1.3vw;" alt="pirate" />
+      </Link>
+    </div>
+  </div>
+</footer>

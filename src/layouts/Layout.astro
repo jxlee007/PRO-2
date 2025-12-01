@@ -1,0 +1,78 @@
+---
+import "../styles/global.css";
+export interface Props {
+	title?: string;
+}
+const title = Astro.props.title ?? "Photographer's Portfolio";
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>{title}</title>
+		<!-- Using local Nunito fonts from /public/fonts/static/ -->
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;400;600;700;800;900&display=swap"
+			rel="stylesheet"
+		/>
+		<link
+			href="https://cdn.jsdelivr.net/npm/remixicon@2.2.0/fonts/remixicon.css"
+			rel="stylesheet"
+		/>
+		<!-- Swiper CSS (CDN) - included so island is self-contained -->
+		<link
+			rel="stylesheet"
+			href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css"
+		/>
+
+		<slot name="head" />
+	</head>
+	<body class="antialiased font-sans no-scrollbar">
+		<slot />
+	</body>
+	<!-- Client-only initialization: import ESM Swiper and wire thumbs -->
+	<script type="module" defer is:inline>
+		// Dynamically import the ESM Swiper bundle from the CDN so this runs only in the browser
+		(async () => {
+			if (typeof document === "undefined") return;
+			try {
+				const { default: Swiper } = await import(
+					"https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.esm.browser.min.js"
+				);
+
+				document.querySelectorAll(".gallery-island").forEach((root) => {
+					const thumbsEl = root.querySelector(".mySwiper");
+					const mainEl = root.querySelector(".mySwiper2");
+					if (!thumbsEl || !mainEl) return;
+
+					const thumbs = new Swiper(thumbsEl, {
+						spaceBetween: 8,
+						slidesPerView: 4,
+						freeMode: true,
+						watchSlidesProgress: true,
+						breakpoints: {
+							640: { slidesPerView: 4 },
+							320: { slidesPerView: 3 },
+						},
+					});
+
+					new Swiper(mainEl, {
+						spaceBetween: 10,
+						navigation: {
+							nextEl: root.querySelector(".swiper-button-next"),
+							prevEl: root.querySelector(".swiper-button-prev"),
+						},
+						thumbs: { swiper: thumbs },
+					});
+				});
+			} catch (err) {
+				// Swallow errors silently but log for debugging
+				console.error("Failed to init Gallery Swiper island", err);
+			}
+		})();
+	</script>
+</html>

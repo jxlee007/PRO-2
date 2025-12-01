@@ -1,0 +1,62 @@
+---
+import Layout from "../layouts/Layout.astro";
+const title = "Jacks Pirate Life";
+---
+
+<Layout title={title}>
+    <main
+        id="main"
+        class="relative w-full min-h-full bg-cover  bg-no-repeat"
+        style="background-image: url('/images/limited-edt.jpg'); font-family: 'Montserrat', sans-serif  ;"
+
+    >
+
+        <div class="relative z-10 min-h-screen flex flex-col items-center justify-center px-6 py-24">
+            <!-- skull icon -->
+            <header class="mb-16">
+                <img src="/images/skullwhite_75x.png" alt="pirate skull" width="75" height="75" class="block mx-auto" />
+            </header>
+
+            <!-- hero content -->
+            <section id="hero" class="w-full max-w-3xl text-center">
+                <h1 class="text-white uppercase font-ligh tracking-tight text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-tight">
+                    next drop : tba
+                </h1>
+
+                <div class="my-6 flex justify-center">
+                    <hr class="w-12 border-gray-200/30" />
+                </div>
+
+                <p class="text-yellow-400 uppercase font-semibold tracking-wide mb-4">thanks everyone!!</p>
+
+                <!-- subscribe form -->
+                <form class="flex justify-center" action="#" method="post" aria-label="Subscribe for drops">
+                    <label for="email" class="sr-only">Email address</label>
+                    <div class="flex w-full max-w-lg">
+                        <input
+                            id="email"
+                            name="email"
+                            type="email"
+                            required
+                            placeholder="GET DROP NOTIFICATIONS"
+                            class="flex-1 px-4 py-1 border border-white bg-slate-700 placeholder-white/70 text-white focus:outline-none focus:ring-2 focus:ring-white"
+                        />
+                        <button
+                            type="submit"
+                            class="px-6 py-3 bg-slate-900 text-black font-semibold uppercase  hover:brightness-95 transition"
+                        >
+                            Subscribe
+                        </button>
+                    </div>
+                </form>
+
+                <p class="text-yellow-400 uppercase font-semibold tracking-widest mt-6">turn on ppl ig notifications</p>
+
+                <div id="bottom" class="mt-8 text-white/90 uppercase tracking-wide">
+                    <div class="text-lg">for customer service (mon-fri)</div>
+                    <div class="mt-2 font-semibold">sales@jackspiratelife.com</div>
+                </div>
+            </section>
+        </div>
+    </main>
+</Layout>

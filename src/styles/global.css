@@ -1,0 +1,477 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+/*
+  LOCAL SELF-HOSTED FONT (optional)
+
+  After you download the Nunito font files into `public/fonts/` (see
+  `public/fonts/README.md` for an automated PowerShell script), you can
+  uncomment the @font-face declarations below to serve fonts locally and
+  avoid external Google Fonts requests.
+
+  The PowerShell script saves the WOFF2 files into public/fonts and you can
+  use the exact filenames it creates. Example local filenames used below are
+  placeholders (Nunito-400.woff2, Nunito-700.woff2, ...). Update them if the
+  downloader uses different names.
+*/
+
+/*
+@font-face {
+  font-family: 'Nunito Sans';
+  font-style: normal;
+  font-weight: 200;
+  font-display: swap;
+  src: url('/fonts/static/Nunito-ExtraLight.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Nunito Sans';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url('/fonts/static/Nunito-Light.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Nunito Sans';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/static/Nunito-Regular.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Nunito Sans';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/fonts/static/Nunito-Medium.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Nunito Sans';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('/fonts/static/Nunito-SemiBold.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Nunito Sans';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/static/Nunito-Bold.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Nunito Sans';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url('/fonts/static/Nunito-ExtraBold.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Nunito Sans';
+  font-style: normal;
+  font-weight: 900;
+  font-display: swap;
+  src: url('/fonts/static/Nunito-Black.ttf') format('truetype');
+}
+
+/* Optional: italic variants are available under /fonts/static/*Italic.ttf if you need them */
+
+
+/* accordian */
+
+.transition,
+ul li i:before,
+ul li i:after,
+p {
+    transition: all 0.25s ease-in-out;
+}
+
+.flipIn,
+ul li,
+h1 {
+    animation: flipdown 0.5s ease both;
+}
+
+.no-select,
+h2 {
+    font-size: 1.5vw;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+
+
+#accordion .list p {
+    /* color: rgba(48, 69, 92, 0.8); */
+    color: black;
+    font-size: 1vw;
+    line-height: 26px;
+    letter-spacing: 1px;
+    position: relative;
+    overflow: hidden;
+    max-height: 800px;
+    opacity: 1;
+    transform: translate(0, 0);
+    margin-top: 14px;
+    z-index: 2;
+}
+
+#accordion .list {
+    list-style: none;
+    perspective: 900;
+    padding: 0;
+    margin: 0;
+}
+
+#accordion .list li {
+    position: relative;
+    padding: 0;
+    margin: 0;
+    padding-bottom: 4px;
+    padding-top: 18px;
+    border-top: 1px solid black;
+}
+
+#accordion .list li:nth-of-type(1) {
+    animation-delay: 0.5s;
+}
+
+#accordion .list li:nth-of-type(2) {
+    animation-delay: 0.75s;
+}
+
+#accordion .list li:nth-of-type(3) {
+    animation-delay: 1s;
+}
+
+#accordion .list li:last-of-type {
+    padding-bottom: 0;
+}
+
+#accordion .list li i {
+    position: absolute;
+    transform: translate(-6px, 0);
+    margin-top: 16px;
+    right: 0;
+}
+
+#accordion .list li i:before,
+.list li i:after {
+    content: "";
+    position: absolute;
+    background-color: black;
+    width: 3px;
+    height: 9px;
+}
+
+#accordion .list li i:before {
+    transform: translate(-2px, 0) rotate(45deg);
+    /* content: "+"; */
+}
+
+#accordion .list li i:after {
+    transform: translate(2px, 0) rotate(-45deg);
+}
+
+#accordion .list li input[type=checkbox] {
+    position: absolute;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    opacity: 0;
+}
+
+#accordion .list li input[type=checkbox]:checked~p {
+    margin-top: 0;
+    max-height: 0;
+    opacity: 0;
+    transform: translate(0, 50%);
+}
+
+#accordion .list li input[type=checkbox]:checked~i:before {
+    transform: translate(2px, 0) rotate(45deg);
+}
+
+#accordion .list li input[type=checkbox]:checked~i:after {
+    transform: translate(-2px, 0) rotate(-45deg);
+}
+
+@keyframes flipdown {
+    0% {
+        opacity: 0;
+        transform-origin: top center;
+        transform: rotateX(-90deg);
+    }
+
+    5% {
+        opacity: 1;
+    }
+
+    80% {
+        transform: rotateX(8deg);
+    }
+
+    83% {
+        transform: rotateX(6deg);
+    }
+
+    92% {
+        transform: rotateX(-3deg);
+    }
+
+    100% {
+        transform-origin: top center;
+        transform: rotateX(0deg);
+    }
+}
+
+@media (max-width: 550px) {
+    body {
+        box-sizing: border-box;
+        transform: translate(0, 0);
+        max-width: 100%;
+        min-height: 100%;
+        margin: 0;
+        left: 0;
+    }
+}
+
+/* footer */
+
+/* about section */
+#abt {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 7vw 7.4vw 15vw;
+    background-image: linear-gradient(rgb(245, 245, 245), whitesmoke);
+    cursor: pointer;
+}
+
+#abt h1 {
+    margin: 0;
+    padding-bottom: 1.24vw;
+    text-transform: capitalize;
+    font-size: 4vw;
+    font-weight: 100;
+    letter-spacing: .2vw;
+    color: black;
+}
+
+#form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0vw 7.4vw 6vw;
+    background-image: linear-gradient(rgb(245, 245, 245), whitesmoke);
+    cursor: pointer;
+}
+
+#form h2 {
+    margin: 0;
+    font-size: 2.2vw;
+    text-transform: capitalize;
+    font-weight: 300;
+    color: black;
+}
+
+#form p {
+    font-size: 1.1vw;
+    font-weight: 100;
+    margin: 1.3vw 0vw;
+    color: black;
+}
+
+#form span {
+    display: flex;
+    flex-direction: row;
+    gap: .5vw;
+    margin: 1vw 0vw;
+}
+
+#form input[type=email] {
+    padding: 1.1vw;
+    border: .1vw solid #bdbdbd;
+
+}
+
+#form input[type=email]:placeholder-shown {
+    visibility: visible;
+    width: 20vw;
+}
+
+
+#form button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: black;
+    background-color: #fafafa;
+    border: .21vw solid black;
+    padding: .9vw 2vw;
+    font-size: .9vw;
+    font-weight: 400;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition-duration: .35s;
+}
+
+#form button:hover {
+    background-color: black;
+    color: #fafafa;
+}
+
+
+#abt a {
+    text-decoration: none;
+    font-size: 1.6vw;
+    color: black;
+    padding: .3vw;
+    cursor: pointer;
+}
+
+#abt a:hover {
+    color: grey;
+}
+
+/* hoverlist */
+/* hoverlist section */
+#hiddenlist {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.5s;
+    position: absolute;
+    /* animation: fade-out 4s 4s ease-out forwards; */
+}
+
+#hoverlist:hover+#hiddenlist,
+#hiddenlist:hover {
+    display: flex;
+    flex-direction: column;
+    padding: 1vw .5vw;
+    text-transform: uppercase;
+    color: black;
+    background-color: #fff;
+    animation: moveToUp .3s ease-in;
+    opacity: 1;
+    position: absolute;
+    transition-duration: .4s;
+    z-index: 999;
+    /* allow the popup to expand to fit its longest item */
+    min-width: max-content;
+}
+
+#list #hiddenlist a:hover {
+    color: #d3d3d3;
+}
+
+
+@keyframes moveToUp {
+    0% {
+        transform: translateY(30px);
+    }
+
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+#side #hiddenlist a {
+    color: black;
+    padding: .3vw 1vw;
+    line-height: 1.5vw;
+    font-size: .9vw;
+    font-weight: 400;
+    /* prevent text from wrapping so each item stays on one line */
+    white-space: nowrap;
+}
+
+#hoverlist:hover:after+#hiddenlist {
+    opacity: 0;
+    position: absolute;
+    animation: fade-out 4s 1s ease-out forwards;
+}
+
+/* nav */
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.8vw 7.4vw 0vw;
+    background-color: transparent;
+    cursor: auto;
+}
+
+#digisign {
+    cursor: pointer;
+}
+
+#side {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    cursor: pointer;
+}
+
+#side a {
+    display: flex;
+    padding: .7vw .5vw;
+    text-decoration: none;
+    color: #bdbdbd;
+    text-transform: uppercase;
+    font-size: .9vw;
+    letter-spacing: .1vw;
+    font-weight: 400;
+    cursor: pointer;
+}
+
+#side a:hover {
+    color: lightgrey;
+}
+
+/* Hide scrollbar helper: add the class `no-scrollbar` to any scrollable element
+   to hide native scrollbars while preserving scroll behavior. */
+.no-scrollbar::-webkit-scrollbar {
+    display: none;
+    /* Chrome, Safari, Opera */
+}
+
+.no-scrollbar {
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+    overflow: auto;
+    /* allow scrolling while the scrollbar is hidden */
+    /* legacy/experimental: overflow: -moz-scrollbars-none; */
+}
+
+/* Allow applying the helper to the root/html/body to hide the page scrollbar
+   while keeping scrolling. Add the class `no-scrollbar` to the <html> or
+   <body> element (example: <body class="no-scrollbar">). */
+html.no-scrollbar,
+body.no-scrollbar {
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+    overflow: auto;
+    /* keep scrolling enabled */
+}
+
+html.no-scrollbar::-webkit-scrollbar,
+body.no-scrollbar::-webkit-scrollbar {
+    display: none;
+    /* Chrome, Safari, Opera */
+}

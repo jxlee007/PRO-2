@@ -1,0 +1,261 @@
+---
+import Link from "../components/Link.astro";
+---
+
+<!--
+Parallax.astro
+Tailwind-based layout recreated from PROJECT-2/index
+- Uses Tailwind utility classes instead of the original inline styles
+- Keeps the original parallax.js data attributes on the parallax elements
+- Renders the newsletter + follow footer via the Footer component
+Notes: Ensure Tailwind and Remixicon are available in the project and the referenced
+images (pl-11.jpg, pl-2.jpg, etc.) are in the site's `public/` folder.
+-->
+<div id="main">
+    <!-- parallax sections -->
+    <main>
+        <div
+            class="min-h-screen parallax-window"
+            data-parallax="scroll"
+            data-bleed="8"
+            data-image-src="/images/parallax/pl-11.jpg"
+        >
+        </div>
+
+        <section
+            class="h-screen flex items-center parallax-window"
+            data-parallax="scroll"
+            data-bleed="0"
+            data-image-src="/images/parallax/pl-2.jpg"
+        >
+            <div class="w-full ml-4 mx-auto px-8">
+                <h1
+                    class="text-5xl md:text-6xl lg:text-7xl text-white uppercase font-light pl-2"
+                >
+                    lightroom presets
+                </h1>
+                <Link
+                    href="/shop/photo-preset"
+                    class="pl-2 inline-block text-yellow-400 uppercase font-bold text-base md:text-lg underline"
+                    >shop presets →</Link
+                >
+            </div>
+        </section>
+
+        <section
+            class="h-screen flex items-center parallax-window"
+            data-parallax="scroll"
+            data-bleed="0"
+            data-image-src="/images/parallax/pl-3.jpg"
+        >
+            <div class="w-full ml-4 mx-auto px-8">
+                <h1
+                    class="text-5xl md:text-6xl lg:text-7xl text-white uppercase font-light pl-2"
+                >
+                    limited edition<br />prints
+                </h1>
+                <a
+                    href="/prints"
+                    class="pl-2 inline-block text-yellow-400 uppercase font-bold text-base md:text-lg underline"
+                    >shop prints →</a
+                >
+            </div>
+        </section>
+
+        <section
+            class="h-screen flex items-center parallax-window"
+            data-parallax="scroll"
+            data-bleed="0"
+            data-image-src="/images/parallax/pl-4.jpg"
+        >
+            <div class="w-full ml-4 mx-auto px-8">
+                <h1
+                    class="text-5xl md:text-6xl lg:text-7xl text-white uppercase font-light pl-2"
+                >
+                    motion graphics
+                </h1>
+                <a
+                    href="/shop/motion-gfx"
+                    class="pl-2 inline-block text-yellow-400 uppercase font-bold text-base md:text-lg underline"
+                    >shop motion packs →</a
+                >
+            </div>
+        </section>
+
+        <section
+            class="h-screen flex items-center parallax-window"
+            data-parallax="scroll"
+            data-bleed="0"
+            data-image-src="/images/parallax/pl-5.jpg"
+        >
+            <div class="w-full ml-4 mx-auto px-8">
+                <span class="flex flex-col items-center gap-4">
+                    <strong
+                        class="text-5xl md:text-6xl lg:text-7xl text-white font-extrabold uppercase"
+                        >jack's pirate life</strong
+                    >
+                    <Link
+                        href="/shop/pirates-life"
+                        target="_blank"
+                        class="bg-yellow-400 text-black px-6 py-3 font-bold uppercase"
+                    >
+                        limited edition drops
+                    </Link>
+                </span>
+            </div>
+        </section>
+
+        <section
+            class="h-screen flex items-center parallax-window"
+            data-parallax="scroll"
+            data-bleed="0"
+            data-image-src="/images/parallax/pl-last.jpg"
+        >
+            <div class="w-full ml-4 mx-auto px-8">
+                <h1
+                    class="text-5xl md:text-6xl lg:text-7xl text-white uppercase font-light pl-2"
+                >
+                    youtube
+                </h1>
+                <a
+                    href="/shop/photo-preset"
+                    class="pl-2 inline-block text-yellow-400 uppercase font-bold text-base md:text-lg underline"
+                    >see more vids→</a
+                >
+            </div>
+        </section>
+    </main>
+</div>
+
+<!-- parallax scroll using scroll (kept from original) -->
+<script
+    src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"
+    defer></script>
+<script src="https://cdn.jsdelivr.net/parallax.js/1.4.2/parallax.min.js" defer
+></script>
+
+<!-- Mobile responsive parallax handler -->
+<script is:inline>
+    // Detect mobile devices
+    function isMobileDevice() {
+        return (
+            /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+                navigator.userAgent,
+            ) || window.innerWidth < 768
+        );
+    }
+
+    // Wait for parallax.js to load
+    window.addEventListener("load", function () {
+        if (isMobileDevice()) {
+            // On mobile, disable parallax and use static backgrounds
+            const parallaxWindows =
+                document.querySelectorAll(".parallax-window");
+
+            parallaxWindows.forEach(function (element) {
+                const imageSrc = element.getAttribute("data-image-src");
+
+                // Apply static background instead of parallax
+                element.style.backgroundImage = "url(" + imageSrc + ")";
+                element.style.backgroundSize = "cover";
+                element.style.backgroundPosition = "center center";
+                element.style.backgroundAttachment = "scroll"; // Use scroll instead of fixed for better mobile performance
+                element.style.backgroundRepeat = "no-repeat";
+
+                // Remove parallax data attributes to prevent parallax.js from initializing
+                element.removeAttribute("data-parallax");
+                element.removeAttribute("data-image-src");
+                element.removeAttribute("data-bleed");
+
+                // Add a mobile-specific class for additional styling
+                element.classList.add("mobile-static-bg");
+            });
+        }
+    });
+
+    // Re-check on resize (e.g., orientation change)
+    let resizeTimer;
+    window.addEventListener("resize", function () {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(function () {
+            if (isMobileDevice()) {
+                document
+                    .querySelectorAll(".parallax-window")
+                    .forEach(function (element) {
+                        if (!element.classList.contains("mobile-static-bg")) {
+                            const imageSrc =
+                                element.getAttribute("data-image-src");
+                            if (imageSrc) {
+                                element.style.backgroundImage =
+                                    "url(" + imageSrc + ")";
+                                element.style.backgroundSize = "cover";
+                                element.style.backgroundPosition =
+                                    "center center";
+                                element.style.backgroundAttachment = "scroll";
+                                element.classList.add("mobile-static-bg");
+                            }
+                        }
+                    });
+            }
+        }, 250);
+    });
+</script>
+
+<style>
+    /* Mobile optimizations */
+    @media (max-width: 767px) {
+        .parallax-window {
+            /* Ensure proper height on mobile */
+            min-height: 100vh;
+            min-height: 100svh; /* Use small viewport height for better mobile support */
+        }
+
+        .mobile-static-bg {
+            /* Increase brightness overlay for better text readability on mobile */
+            position: relative;
+        }
+
+        .mobile-static-bg::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.3);
+            pointer-events: none;
+        }
+
+        /* Ensure content is above overlay */
+        .mobile-static-bg > div {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Adjust text sizing for mobile */
+        .parallax-window h1 {
+            font-size: 2.5rem !important;
+            line-height: 1.1;
+        }
+
+        /* Better spacing on mobile */
+        .parallax-window > div {
+            padding-left: 1rem !important;
+            padding-right: 1rem !important;
+        }
+    }
+
+    /* Tablet adjustments */
+    @media (min-width: 768px) and (max-width: 1023px) {
+        .parallax-window h1 {
+            font-size: 3.5rem !important;
+        }
+    }
+
+    /* Prevent scrolling issues on iOS */
+    @supports (-webkit-touch-callout: none) {
+        .parallax-window {
+            background-attachment: scroll !important;
+        }
+    }
+</style>

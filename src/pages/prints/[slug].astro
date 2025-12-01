@@ -1,0 +1,150 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Nav from "../../components/Nav.astro";
+import Footer from "../../components/Footer.astro";
+import Gallery from "../../components/Gallery.astro";
+import {
+  getPrintEntries,
+  defaultPaperInfo,
+  defaultDisclaimers,
+  type PrintDetail,
+} from "../../lib/prints";
+
+export async function getStaticPaths() {
+	const entries = getPrintEntries();
+	return entries.map((print) => ({
+		params: { slug: print.slug },
+		props: { print },
+	}));
+}
+
+const { print } = Astro.props as { print: PrintDetail };
+
+const selectId = `edition-${print.slug}`;
+const galleryImages = print.gallery && print.gallery.length > 0 ? print.gallery : undefined;
+const supportingImages = print.supportingImages && print.supportingImages.length > 0 ? print.supportingImages : [];
+const paperInfo = print.paperInfo ?? defaultPaperInfo;
+const disclaimers = print.disclaimers ?? defaultDisclaimers;
+const hasSizes = Boolean(print.edition?.sizes && print.edition.sizes.length);
+const allowSelection = hasSizes && !(print.cta?.disabled ?? false);
+---
+
+<Layout title={`${print.title} — PM Prints`}>
+	<Nav logo="/images/digisign/ds1-black.png" />
+	<main class="px-4 sm:px-8 py-10">
+		<section class="max-w-7xl mx-auto">
+			<Gallery images={galleryImages}>
+				<div slot="meta" class="space-y-6 ">
+					<div class="space-y-3">
+						{print.collection ? (
+							<p class="text-xs uppercase tracking-[0.35em] text-gray-500">{print.collection}</p>
+						) : null}
+						<h1 class="text-3xl sm:text-4xl md:text-5xl font-semibold text-gray-900">{print.title}</h1>
+					</div>
+					{print.description.length ? (
+						<div class="space-y-4 text-gray-600 leading-relaxed">
+							{print.description.map((paragraph) => (
+								<p>{paragraph}</p>
+							))}
+						</div>
+					) : null}
+				</div>
+			</Gallery>
+		</section>
+
+		<section class="max-w-5xl mx-auto mt-8 md:-mt-40 space-y-6">
+			{print.edition ? (
+				<div class="space-y-3">
+					{print.edition.intro ? (
+						<p class="font-semibold text-sm uppercase tracking-wide text-gray-700">{print.edition.intro}</p>
+					) : null}
+					{print.edition.sizes && print.edition.sizes.length ? (
+						<ul class="list-disc list-inside space-y-1 text-sm text-gray-600">
+							{print.edition.sizes.map((size) => (
+								<li>
+									<strong class="font-medium text-gray-800">{size.quantity ? `${size.quantity} ` : ""}{size.label}</strong>
+									{size.dimensions ? ` (image size ${size.dimensions})` : ""}
+									{size.priceLabel ? ` — ${size.priceLabel}` : ""}
+								</li>
+							))}
+						</ul>
+					) : null}
+				</div>
+			) : null}
+			{print.features && print.features.length ? (
+				<ul class="list-disc list-inside space-y-1 text-sm text-gray-600">
+					{print.features.map((item) => (
+						<li>{item}</li>
+					))}
+				</ul>
+			) : null}
+			{print.notes && print.notes.length ? (
+				<div class="space-y-2 text-sm text-gray-600">
+					{print.notes.map((note) => (
+						<p>{note}</p>
+					))}
+				</div>
+			) : null}
+			{print.edition?.priceSummary ? (
+				<p class="text-base font-semibold text-gray-900">{print.edition.priceSummary}</p>
+			) : null}
+			{allowSelection ? (
+				<div class="space-y-3 max-w-xs">
+					<label for={selectId} class="block text-xs uppercase tracking-wider text-gray-500">
+						Select size
+					</label>
+					<select
+						id={selectId}
+						name="edition-size"
+						class="w-full border border-gray-300 bg-white px-3 py-2 text-sm focus:border-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-200"
+					>
+						{print.edition?.sizes?.map((size) => (
+							<option value={size.id}>
+								{size.label}
+								{size.dimensions ? ` (${size.dimensions})` : ""}
+								{size.priceLabel ? ` — ${size.priceLabel}` : ""}
+							</option>
+						))}
+					</select>
+				</div>
+			) : null}
+			{print.cta ? (
+				<div class="space-y-2">
+					<button
+						type="button"
+						class={`inline-flex items-center justify-center  bg-yellow-400 px-5 py-3 text-sm font-semibold uppercase tracking-wider text-gray-900 transition hover:bg-yellow-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 ${
+							print.cta.disabled ? "cursor-not-allowed opacity-60" : ""
+						}`}
+						disabled={print.cta.disabled ?? false}
+					>
+						{print.cta.label}
+					</button>
+					{print.cta.note ? (
+						<p class="text-xs uppercase tracking-wider text-gray-500">{print.cta.note}</p>
+					) : null}
+				</div>
+			) : null}
+		</section>
+
+		<section class="max-w-6xl mx-auto mt-12">
+			<div class="text-center space-y-6">
+				<p class="text-gray-600 text-sm sm:text-base leading-relaxed">{paperInfo}</p>
+				{supportingImages.length ? (
+					<div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+						{supportingImages.map((image) => (
+							<figure class="aspect-[3/4] overflow-hidden bg-gray-100">
+								<img src={image.src} alt={image.alt ?? ""} class="h-full w-full object-cover" />
+							</figure>
+						))}
+					</div>
+				) : null}
+				<div class="space-y-1 text-xs uppercase tracking-wider text-gray-500">
+					{disclaimers.map((entry) => (
+						<p>{entry}</p>
+					))}
+				</div>
+			</div>
+		</section>
+	</main>
+	<Footer />
+</Layout>

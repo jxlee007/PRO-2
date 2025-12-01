@@ -1,0 +1,65 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Nav from "../components/Nav.astro";
+import Footer from "../components/Footer.astro";
+import Link from '../components/Link.astro';
+
+const images = [
+  "/images/about/abt-2.jpg",
+  "/images/about/abt-3.jpg",
+  "/images/about/abt-1.jpg",
+];
+---
+
+<Layout title="About">
+  <Nav logo="/images/digisign/ds1-black.png" />
+
+  <main class="px-6 sm:px-12 py-16">
+    <div class="max-w-6xl mx-auto">
+      <section class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start mb-12">
+        <div class="order-2 lg:order-1">
+          <h1 class="text-3xl lg:text-5xl font-light tracking-wider mb-6">About</h1>
+          <p class="text-gray-700 italic leading-relaxed text-sm sm:text-base">
+            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Eum obcaecati
+            animi harum accusantium minima, aperiam quis! Quaerat fugit vitae ad
+            officiis dolore iure accusantium adipisci esse cumque eum commodi vero
+            similique enim cupiditate voluptates, eveniet illum porro fugiat saepe
+            blanditiis, libero reprehenderit beatae animi corrupti! Labore rem unde
+            cum dolorum fuga a nulla, ea quasi odio laborum explicabo? Maiores ipsam
+            dolorem ipsa perferendis sed voluptate officiis eligendi, laborum quis
+            vel porro nam? Aliquam nam impedit cupiditate dolor quisquam? Odio
+            excepturi sapiente labore. Velit ullam voluptatum repellat minus
+            necessitatibus asperiores placeat atque quas deleniti.
+          </p>
+        </div>
+
+        <div class="order-1 lg:order-2 flex justify-center">
+          <div class="flex items-center gap-4 text-gray-700">
+            <a class="text-xl hover:text-black" href="#" aria-label="YouTube"><i class="ri-youtube-fill"></i></a>
+            <a class="text-xl hover:text-black" href="#" aria-label="Instagram"><i class="ri-instagram-line"></i></a>
+            <a class="text-xl hover:text-black" href="#" aria-label="Facebook"><i class="ri-facebook-fill"></i></a>
+            <a class="text-xl hover:text-black" href="#" aria-label="Twitter"><i class="ri-twitter-fill"></i></a>
+            <Link href="/pirates-life" class="inline-block" aria-label="Pirate life">
+                <img src="/images/skull.png" class="w-4 h-6" alt="pirate"  />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+    <section class="mb-16">
+        <div class="flex flex-col md:flex-row md:items-stretch gap-4">
+            <img src={images[0]} alt="about image 1" class="w-full md:w-1/4 object-cover h-60 sm:h-80 md:h-[28rem]" />
+            <img src={images[1]} alt="about image 2" class="w-full md:w-1/2 object-cover h-60 sm:h-80 md:h-[28rem]" />
+            <img src={images[2]} alt="about image 3" class="w-full md:w-1/4 object-cover h-60 sm:h-80 md:h-[28rem]" />
+        </div>
+    </section>
+    </div>
+  </main>
+
+  <Footer />
+</Layout>
+
+<style>
+  main { animation: fadeIn 700ms ease-in-out both; }
+  @keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
+</style>

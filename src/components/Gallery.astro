@@ -1,0 +1,76 @@
+---
+// Gallery.astro - an interactive Astro island (initialization runs on client)
+// Props: images: Array<{src:string, thumb:string, alt?:string}>
+const uid = Math.random().toString(36).slice(2, 9);
+export interface Props {
+  images?: { src: string; thumb?: string; alt?: string }[];
+}
+export const imagesDefault = [
+  {
+    src: '/images/thumb-gallery/ford-gt-pm800.jpg',
+    thumb: '/images/thumb-gallery/ford-gt-pm800%20small.jpg',
+    alt: 'Ford GT sunset print in frame',
+  },
+  {
+    src: '/images/thumb-gallery/fordgt-wideall.jpg',
+    thumb: '/images/thumb-gallery/fordgt-wideall%20small.jpg',
+    alt: 'Ford GT triptych displayed on wall',
+  },
+  {
+    src: '/images/thumb-gallery/fordgt-cularge-solo.jpg',
+    thumb: '/images/thumb-gallery/fordgt-cusmall-solo.jpg',
+    alt: 'Ford GT large format detail',
+  },
+  {
+    src: '/images/thumb-gallery/fordgt-cumed-solo.jpg',
+    thumb: '/images/thumb-gallery/fordgt-cumed-solo%20small.jpg',
+    alt: 'Ford GT medium crop print detail',
+  },
+  {
+    src: '/images/thumb-gallery/fordgt-widelarge-solo.jpg',
+    thumb: '/images/thumb-gallery/fordgt-widelarge-solo%20small.jpg',
+    alt: 'Ford GT wide angle hero shot print',
+  },
+];
+
+const { images = imagesDefault } = Astro.props as Props & { images?: typeof imagesDefault };
+---
+
+<div id={`gallery-${uid}`} class="gallery-island max-w-5xl mx-auto">
+  <div class="flex flex-col md:flex-row gap-6 items-start">
+    <!-- Right: text / details slot (optional) -->
+    <div class="order-1 w-full md:w-1/2 md:pr-8">
+      <slot name="meta">
+        <!-- default metadata slot left empty so consumer can provide content -->
+      </slot>
+    </div>
+
+    <!-- Left: sliders -->
+    <div class="order-2 mt-6 w-full md:mt-0 md:w-1/2">
+      <div class="relative">
+        <div class="swiper mySwiper2 overflow-hidden bg-gray-900/5">
+          <div class="swiper-wrapper">
+            {images.map((img) => (
+              <div class="swiper-slide flex items-center justify-center bg-gray-100">
+                <img src={img.src} alt={img.alt ?? ''} class="object-contain w-full h-[40vh] md:h-[50vh]" />
+              </div>
+            ))}
+          </div>
+
+          <button class="swiper-button-next text-white/90"></button>
+          <button class="swiper-button-prev text-white/90"></button>
+        </div>
+
+        <div class="mt-4 swiper mySwiper grid grid-cols-4 gap-2">
+          <div class="swiper-wrapper col-span-4 flex gap-2">
+            {images.map((img) => (
+              <div class="swiper-slide shrink-0 w-20 h-16 overflow-hidden border border-gray-200">
+                <img src={img.thumb ?? img.src} alt={img.alt ?? ''} class="w-full h-full object-cover" />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

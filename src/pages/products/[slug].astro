@@ -1,0 +1,241 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Nav from "../../components/Nav.astro";
+import Footer from "../../components/Footer.astro";
+import type { ToolProduct } from "../../lib/tools";
+import { getToolProducts } from "../../lib/tools";
+
+export async function getStaticPaths() {
+	const products = getToolProducts();
+	return products.map((product) => ({
+		params: { slug: product.slug },
+		props: { product },
+	}));
+}
+
+const { product } = Astro.props as { product: ToolProduct };
+
+const selectId = `product-option-${product.slug}`;
+const hasGallery = Boolean(product.gallery && product.gallery.length);
+const hasSections = Boolean(product.sections && product.sections.length);
+const disclaimers = product.disclaimers ?? [];
+const notes = product.notes ?? [];
+
+const getVideoPadding = (aspectRatio?: string) => {
+	if (!aspectRatio) return "56.25%";
+	const parts = aspectRatio.split(/[/:]/).map((part) => parseFloat(part.trim()));
+	if (parts.length !== 2) return "56.25%";
+	const [width, height] = parts;
+	if (!width || !height || Number.isNaN(width) || Number.isNaN(height)) return "56.25%";
+	return `${(height / width) * 100}%`;
+};
+
+const videoPadding = getVideoPadding(product.video?.aspectRatio);
+---
+
+<Layout title={`${product.title}${product.subtitle ? ` ${product.subtitle}` : ""} — PM Shop`}>
+	<Nav logo="/images/digisign/ds1-black.png" />
+	<main class="px-4 sm:px-8 py-12 space-y-16">
+		<section class="max-w-6xl mx-auto grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,480px)] lg:items-start">
+			<div class="space-y-6">
+				{product.category ? (
+					<p class="text-xs uppercase tracking-[0.35em] text-gray-500">{product.category}</p>
+				) : null}
+				<div class="space-y-2">
+					<h1 class="text-3xl sm:text-4xl md:text-5xl font-semibold text-gray-900 leading-tight">{product.title}</h1>
+					{product.subtitle ? (
+						<p class="text-2xl sm:text-3xl font-medium text-gray-800">{product.subtitle}</p>
+					) : null}
+				</div>
+				{product.descriptions.map((paragraph) => (
+					<p class="text-base text-gray-600 leading-relaxed">{paragraph}</p>
+				))}
+				{product.heroHighlights && product.heroHighlights.length ? (
+					<div class="space-y-2 rounded-lg border border-yellow-300 bg-yellow-50/80 px-4 py-3 text-sm text-yellow-900">
+						{product.heroHighlights.map((highlight) => (
+							<p class="font-medium">{highlight}</p>
+						))}
+					</div>
+				) : null}
+				{product.heroList && product.heroList.length ? (
+					<ul class="list-disc list-inside space-y-1 text-sm text-gray-600">
+						{product.heroList.map((item) => (
+							<li>{item}</li>
+						))}
+					</ul>
+				) : null}
+				{product.price ? (
+					<p class="text-lg font-semibold text-gray-900">{product.price}</p>
+				) : null}
+				{product.selectOptions && product.selectOptions.length ? (
+					<div class="space-y-2 max-w-xs">
+						<label for={selectId} class="block text-xs uppercase tracking-wider text-gray-500">
+							Choose option
+						</label>
+						<select
+							id={selectId}
+							name="product-option"
+							class="w-full border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 focus:border-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-200"
+						>
+							{product.selectOptions.map((option) => (
+								<option value={option.value}>
+									{option.label}
+									{option.priceLabel ? ` — ${option.priceLabel}` : ""}
+								</option>
+							))}
+						</select>
+					</div>
+				) : null}
+				{product.cta ? (
+					<div class="space-y-2">
+						<button
+							type="button"
+							class={`inline-flex min-w-[160px] items-center justify-center rounded-sm bg-yellow-400 px-6 py-3 text-sm font-semibold uppercase tracking-widest text-gray-900 transition hover:bg-yellow-300 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 ${
+								product.cta.disabled ? "cursor-not-allowed opacity-60" : ""
+							}`}
+							disabled={product.cta.disabled ?? false}
+						>
+							{product.cta.label}
+						</button>
+						{product.cta.note ? (
+							<p class="text-xs uppercase tracking-wider text-gray-500">{product.cta.note}</p>
+						) : null}
+					</div>
+				) : null}
+			</div>
+
+			<div class="relative overflow-hidden rounded-xl bg-gray-100 shadow-sm">
+				<img
+					src={product.heroImage.src}
+					alt={product.heroImage.alt ?? ""}
+					class="h-full w-full object-cover"
+				/>
+			</div>
+		</section>
+
+		{hasGallery ? (
+			<section class="max-w-6xl mx-auto">
+				<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+					{product.gallery!.map((image) => (
+						<figure class="relative aspect-[4/5] overflow-hidden rounded-lg bg-gray-100">
+							<img src={image.src} alt={image.alt ?? ""} class="absolute inset-0 h-full w-full object-cover" loading="lazy" />
+							{image.caption ? (
+								<figcaption class="absolute bottom-0 w-full bg-gray-900/70 px-3 py-2 text-xs uppercase tracking-wider text-white">
+									{image.caption}
+								</figcaption>
+							) : null}
+						</figure>
+					))}
+				</div>
+			</section>
+		) : null}
+
+		{product.video ? (
+			<section class="max-w-6xl mx-auto space-y-6">
+				<div class="space-y-2 text-center">
+					<h2 class="text-2xl font-semibold text-gray-900">{product.video.title ?? "See it in action"}</h2>
+					<p class="text-sm uppercase tracking-[0.25em] text-gray-500">watch</p>
+				</div>
+				<div class="relative w-full overflow-hidden rounded-xl bg-black shadow-lg">
+					<div class="relative w-full" style={{ paddingTop: videoPadding }}>
+						<iframe
+							src={product.video.url}
+							title={product.video.title ?? product.title}
+							allowfullscreen
+							loading="lazy"
+							class="absolute inset-0 h-full w-full"
+							allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+						></iframe>
+					</div>
+				</div>
+			</section>
+		) : null}
+
+		{hasSections ? (
+			<section class="max-w-5xl mx-auto space-y-12">
+				{product.sections!.map((section) => (
+					(() => {
+						const alignClass = section.align === "left" ? "items-start text-left" : "items-center text-center";
+						const variantTone =
+							section.variant === "card"
+								? {
+									wrapper: "bg-neutral-900 text-neutral-100",
+									heading: "text-white",
+									body: "text-neutral-200",
+								}
+							: section.variant === "muted"
+							? {
+									wrapper: "bg-gray-100 text-gray-800",
+									heading: "text-gray-900",
+									body: "text-gray-700",
+								}
+							: {
+									wrapper: "bg-transparent text-gray-700",
+									heading: "text-gray-900",
+									body: "text-gray-600",
+								};
+						const contentAlign = section.align === "left" ? "items-start text-left" : "items-center text-center";
+						const listAlign = section.align === "left" ? "text-left" : "text-left sm:max-w-xl";
+						return (
+							<section class={`flex w-full flex-col gap-5 px-4 py-10 sm:px-10 ${alignClass} ${variantTone.wrapper}`}>
+								{section.accordion ? (
+									<details class="group w-full max-w-3xl" open={section.initiallyOpen ?? false}>
+										<summary class={`flex w-full cursor-pointer items-center justify-between gap-4 text-xs sm:text-sm font-semibold uppercase tracking-[0.35em] ${variantTone.heading}`}>
+											{section.heading ?? "Details"}
+											<span class="text-lg leading-none transition-transform group-open:rotate-45">+</span>
+										</summary>
+										<div class={`mt-5 flex flex-col gap-3 ${contentAlign}`}>
+											{section.body ? section.body.map((paragraph) => (
+												<p class={`text-sm sm:text-base leading-relaxed ${variantTone.body}`}>{paragraph}</p>
+											)) : null}
+											{section.list && section.list.length ? (
+												<ul class={`list-disc list-inside space-y-1 text-sm sm:text-base leading-relaxed ${variantTone.body} ${listAlign}`}>
+													{section.list.map((item) => (
+														<li>{item}</li>
+													))}
+												</ul>
+											) : null}
+										</div>
+									</details>
+								) : (
+									<div class={`flex w-full max-w-3xl flex-col gap-3 ${contentAlign}`}>
+										{section.heading ? (
+											<h3 class={`text-xs sm:text-sm font-semibold uppercase tracking-[0.35em] ${variantTone.heading}`}>{section.heading}</h3>
+										) : null}
+										{section.body ? section.body.map((paragraph) => (
+											<p class={`text-sm sm:text-base leading-relaxed ${variantTone.body}`}>{paragraph}</p>
+										)) : null}
+										{section.list && section.list.length ? (
+											<ul class={`list-disc list-inside space-y-1 text-sm sm:text-base leading-relaxed ${variantTone.body} ${listAlign}`}>
+												{section.list.map((item) => (
+													<li>{item}</li>
+												))}
+											</ul>
+										) : null}
+									</div>
+								)}
+							</section>
+						);
+					})()
+				))}
+			</section>
+		) : null}
+
+		{notes.length ? (
+			<section class="max-w-4xl mx-auto space-y-2 text-center text-sm text-gray-600">
+				{notes.map((note) => (
+					<p>{note}</p>
+				))}
+			</section>
+		) : null}
+
+		{disclaimers.length ? (
+			<section class="max-w-4xl mx-auto space-y-1 text-center text-xs uppercase tracking-[0.3em] text-gray-500">
+				{disclaimers.map((entry) => (
+					<p>{entry}</p>
+				))}
+			</section>
+		) : null}
+	</main>
+	<Footer />
+</Layout>

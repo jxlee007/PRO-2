@@ -1,0 +1,107 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Nav from "../../components/Nav.astro";
+import Footer from "../../components/Footer.astro";
+import { products } from "./products.js";
+
+export async function getStaticPaths() {
+	return products.map((p) => ({
+		params: { slug: p.slug },
+		props: { product: p }
+	}));
+}
+
+const { product } = Astro.props;
+---
+
+<Layout title={product.title}>
+    <Nav logo="/images/digisign/ds1-black.png" />
+    <main class="px-4 sm:px-8 py-8 ">
+        <!-- Hero banner (use product.layout.hero if available) -->
+        <section class="mt-6">
+            <div class="relative max-w-6xl mx-auto overflow-hidden">
+                <img src={product.layout && product.layout.hero ? product.layout.hero : product.image} alt={product.title} class="w-full h-80 sm:h-96 lg:h-[420px] object-cover brightness-90" />
+                <div class="absolute inset-0 flex items-center">
+                    <div class="px-6 sm:px-12">
+                        {product.layout && product.title ? (
+                            product.title.split('\n').map((line, idx) => (
+                                <h1 class={`text-white font-medium line-clamp-2 ${idx === 0 ? 'text-6xl sm:text-7xl md:text-8xl' : 'mt-2 text-6xl sm:text-7xl md:text-8xl'} leading-none tracking-tight`}>{line.toUpperCase()}</h1>
+                            ))
+                        ) : (
+                            <h1 class="text-white font-medium line-clamp-2 text-6xl sm:text-7xl md:text-8xl leading-none tracking-tight">{product.title.toUpperCase()}</h1>
+                        )}
+                    {product.subtitle ? (
+                        <div class="ml-2">
+                            <p class="text-white/90 mt-4 text-lg sm:text-xl max-w-2xl uppercase ">{product.subtitle}</p>
+                        </div>
+                    ) : null}
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Products row rendered from product.layout.products if present -->
+        {product.layout && product.layout.products ? (
+            <section class="mt-8">
+                <div class="max-w-6xl mx-auto">
+                    {(() => {
+                        const productsList = product.layout.products || [];
+                        const count = productsList.length;
+
+                        const responsiveColsClass =
+                            count >= 4
+                                ? "grid-cols-2 sm:grid-cols-3 md:grid-cols-4"
+                                : count === 3
+                                  ? "grid-cols-1 sm:grid-cols-2 md:grid-cols-3"
+                                  : count === 2
+                                    ? "grid-cols-1 sm:grid-cols-2 md:grid-cols-2"
+                                    : "grid-cols-1";
+
+                        return (
+                            <div
+                                class={`grid gap-4 items-center justify-center justify-items-center ${responsiveColsClass}`}
+                            >
+                                {productsList.map((item) => {
+                                    const content = (
+                                        <article class="text-center space-y-3 transition-transform duration-200 group-hover:-translate-y-1">
+                                            <div class="w-full flex justify-center">
+                                                <div class="w-full max-w-xs sm:max-w-sm md:max-w-md sm:h-64 md:h-72 lg:h-80 flex items-center justify-center overflow-hidden rounded-lg bg-white shadow-sm ring-1 ring-transparent group-hover:ring-gray-200">
+                                                    <img src={encodeURI(item.image)} alt={item.title} class="w-full h-full object-cover" />
+                                                </div>
+                                            </div>
+                                            <h3 class="text-md text-gray-700">{item.title}</h3>
+                                        </article>
+                                    );
+
+                                    return item.href ? (
+                                        <a
+                                            href={item.href}
+                                            class="group block focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-gray-900"
+                                        >
+                                            {content}
+                                        </a>
+                                    ) : (
+                                        <div class="group block">{content}</div>
+                                    );
+                                })}
+                            </div>
+                        );
+                    })()}
+                </div>
+            </section>
+        ) : (
+            <!-- fallback: simple generic listing -->
+            <section class="mt-12">
+                <div class="max-w-7xl mx-auto">
+                    <div class="prose">
+                        <h2>{product.title}</h2>
+                        <p>{product.subtitle}</p>
+                    </div>
+                </div>
+            </section>
+        )}
+    </main>
+
+    <Footer />
+</Layout>
+

@@ -1,0 +1,86 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Nav from "../components/Nav.astro";
+import Footer from "../components/Footer.astro";
+---
+
+<Layout title="Contact">
+  <Nav logo="/images/digisign/ds1-black.png" />
+
+  <main class="px-6 sm:px-12 py-16">
+    <div class="max-w-6xl mx-auto">
+      <h1 class="text-3xl lg:text-4xl font-light mb-8">Contact</h1>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+        <!-- Left: image -->
+        <div class="w-full">
+          <img src="/images/contact.jpg" alt="Contact" class="w-full h-auto object-cover rounded-sm shadow-sm" />
+        </div>
+
+        <!-- Right: form -->
+        <div>
+          <form class="space-y-6" onsubmit="event.preventDefault()">
+            <fieldset class="p-0 m-0 border-0 space-y-4">
+              <legend class="sr-only">Purpose of email</legend>
+
+              <div>
+                <p class="text-sm font-medium">Purpose of email <span class="text-gray-400">(required)</span></p>
+                <p class="text-xs text-gray-400 mb-2">select one</p>
+
+                <div class="flex items-center gap-6">
+                  <label class="inline-flex items-center gap-2 text-sm">
+                    <input type="radio" name="purpose" value="business" class="form-radio accent-black scale-125" required />
+                    <span>Business Inquiries</span>
+                  </label>
+
+                  <label class="inline-flex items-center gap-2 text-sm">
+                    <input type="radio" name="purpose" value="customer" class="form-radio accent-black scale-125" />
+                    <span>Customer Service</span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-xs text-gray-700 mb-1">First name</label>
+                  <input type="text" name="firstName" required class="w-full px-3 py-2 bg-white border border-gray-200 text-sm" />
+                </div>
+                <div>
+                  <label class="block text-xs text-gray-700 mb-1">Last name</label>
+                  <input type="text" name="lastName" class="w-full px-3 py-2 bg-white border border-gray-200 text-sm" />
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-xs text-gray-700 mb-1">Email <span class="text-gray-400">(required)</span></label>
+                <input type="email" name="email" required class="w-full px-3 py-2 bg-white border border-gray-200 text-sm" />
+              </div>
+
+              <div>
+                <label class="block text-xs text-gray-700 mb-1">Subject / Order # <span class="text-gray-400">(required)</span></label>
+                <input type="text" name="subject" required class="w-full px-3 py-2 bg-white border border-gray-200 text-sm" />
+              </div>
+
+              <div>
+                <label class="block text-xs text-gray-700 mb-1">Message <span class="text-gray-400">(required)</span></label>
+                <textarea name="message" rows="6" required class="w-full px-3 py-2 bg-white border border-gray-200 text-sm resize-y"></textarea>
+              </div>
+
+              <div>
+                <button type="submit" class="inline-flex items-center justify-center px-6 py-2 border-2 border-black bg-white text-sm font-semibold tracking-wider uppercase">Submit</button>
+              </div>
+            </fieldset>
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <Footer />
+</Layout>
+
+<style>
+  main { animation: fadeIn 700ms ease-in-out both; }
+  @keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
+</style>
