@@ -4,6 +4,8 @@ import Nav from "../../components/Nav.astro";
 import Footer from "../../components/Footer.astro";
 import type { ToolProduct } from "../../lib/tools";
 import { getToolProducts } from "../../lib/tools";
+import { withBase } from "../../lib/utils";
+import BeforeAfterSlider from "../../components/BeforeAfterSlider.astro";
 
 export async function getStaticPaths() {
 	const products = getToolProducts();
@@ -18,6 +20,7 @@ const { product } = Astro.props as { product: ToolProduct };
 const selectId = `product-option-${product.slug}`;
 const hasGallery = Boolean(product.gallery && product.gallery.length);
 const hasSections = Boolean(product.sections && product.sections.length);
+const hasAccordions = Boolean(product.sections && product.sections.some(s => s.accordion));
 const disclaimers = product.disclaimers ?? [];
 const notes = product.notes ?? [];
 
@@ -34,7 +37,7 @@ const videoPadding = getVideoPadding(product.video?.aspectRatio);
 ---
 
 <Layout title={`${product.title}${product.subtitle ? ` ${product.subtitle}` : ""} — PM Shop`}>
-	<Nav logo="/images/digisign/ds1-black.png" />
+	<Nav logo="/images/digisign/ds1-black.webp" />
 	<main class="px-4 sm:px-8 py-12 space-y-16">
 		<section class="max-w-6xl mx-auto grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,480px)] lg:items-start">
 			<div class="space-y-6">
@@ -94,6 +97,11 @@ const videoPadding = getVideoPadding(product.video?.aspectRatio);
 								product.cta.disabled ? "cursor-not-allowed opacity-60" : ""
 							}`}
 							disabled={product.cta.disabled ?? false}
+							data-cart-add
+							data-product-title={product.title}
+							data-product-image={product.heroImage.src}
+							data-product-price={product.price}
+							data-product-select-id={selectId}
 						>
 							{product.cta.label}
 						</button>
@@ -106,19 +114,28 @@ const videoPadding = getVideoPadding(product.video?.aspectRatio);
 
 			<div class="relative overflow-hidden rounded-xl bg-gray-100 shadow-sm">
 				<img
-					src={product.heroImage.src}
+					src={withBase(product.heroImage.src)}
 					alt={product.heroImage.alt ?? ""}
 					class="h-full w-full object-cover"
 				/>
 			</div>
 		</section>
 
+		{product.category === "Lightroom Presets" ? (
+			<section class="max-w-6xl mx-auto space-y-6">
+				<div class="text-center">
+					<h2 class="text-2xl font-bold uppercase tracking-wider text-gray-900">SEE THEM IN ACTION</h2>
+				</div>
+				<BeforeAfterSlider slides={product.slides} />
+			</section>
+		) : null}
+
 		{hasGallery ? (
 			<section class="max-w-6xl mx-auto">
 				<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
 					{product.gallery!.map((image) => (
 						<figure class="relative aspect-[4/5] overflow-hidden rounded-lg bg-gray-100">
-							<img src={image.src} alt={image.alt ?? ""} class="absolute inset-0 h-full w-full object-cover" loading="lazy" />
+							<img src={withBase(image.src)} alt={image.alt ?? ""} class="absolute inset-0 h-full w-full object-cover" loading="lazy" />
 							{image.caption ? (
 								<figcaption class="absolute bottom-0 w-full bg-gray-900/70 px-3 py-2 text-xs uppercase tracking-wider text-white">
 									{image.caption}
@@ -151,91 +168,158 @@ const videoPadding = getVideoPadding(product.video?.aspectRatio);
 			</section>
 		) : null}
 
-		{hasSections ? (
-			<section class="max-w-5xl mx-auto space-y-12">
-				{product.sections!.map((section) => (
-					(() => {
-						const alignClass = section.align === "left" ? "items-start text-left" : "items-center text-center";
-						const variantTone =
-							section.variant === "card"
-								? {
-									wrapper: "bg-neutral-900 text-neutral-100",
-									heading: "text-white",
-									body: "text-neutral-200",
-								}
-							: section.variant === "muted"
-							? {
-									wrapper: "bg-gray-100 text-gray-800",
-									heading: "text-gray-900",
-									body: "text-gray-700",
-								}
-							: {
-									wrapper: "bg-transparent text-gray-700",
-									heading: "text-gray-900",
-									body: "text-gray-600",
-								};
-						const contentAlign = section.align === "left" ? "items-start text-left" : "items-center text-center";
-						const listAlign = section.align === "left" ? "text-left" : "text-left sm:max-w-xl";
+		{hasAccordions ? (
+			<div class="max-w-3xl mx-auto px-4 sm:px-8 space-y-12">
+				{/* Accordion Group */}
+				<div class="divide-y divide-black border-t border-b border-black">
+					{product.sections!.map((section) => {
+						const isOpen = section.initiallyOpen ?? false;
 						return (
-							<section class={`flex w-full flex-col gap-5 px-4 py-10 sm:px-10 ${alignClass} ${variantTone.wrapper}`}>
-								{section.accordion ? (
-									<details class="group w-full max-w-3xl" open={section.initiallyOpen ?? false}>
-										<summary class={`flex w-full cursor-pointer items-center justify-between gap-4 text-xs sm:text-sm font-semibold uppercase tracking-[0.35em] ${variantTone.heading}`}>
-											{section.heading ?? "Details"}
-											<span class="text-lg leading-none transition-transform group-open:rotate-45">+</span>
-										</summary>
-										<div class={`mt-5 flex flex-col gap-3 ${contentAlign}`}>
-											{section.body ? section.body.map((paragraph) => (
-												<p class={`text-sm sm:text-base leading-relaxed ${variantTone.body}`}>{paragraph}</p>
-											)) : null}
-											{section.list && section.list.length ? (
-												<ul class={`list-disc list-inside space-y-1 text-sm sm:text-base leading-relaxed ${variantTone.body} ${listAlign}`}>
-													{section.list.map((item) => (
-														<li>{item}</li>
-													))}
-												</ul>
-											) : null}
-										</div>
-									</details>
-								) : (
-									<div class={`flex w-full max-w-3xl flex-col gap-3 ${contentAlign}`}>
-										{section.heading ? (
-											<h3 class={`text-xs sm:text-sm font-semibold uppercase tracking-[0.35em] ${variantTone.heading}`}>{section.heading}</h3>
-										) : null}
+							<div class="py-5 sm:py-6 bg-transparent text-gray-700">
+								<details class="group w-full" open={isOpen}>
+									<summary class="flex w-full cursor-pointer items-center justify-between gap-4 text-sm sm:text-base font-bold tracking-normal text-gray-900 list-none [&::-webkit-details-marker]:hidden focus:outline-none select-none">
+										{section.heading ?? "Details"}
+										<span class="text-lg font-normal group-open:hidden">+</span>
+										<span class="text-lg font-normal hidden group-open:inline">—</span>
+									</summary>
+									<div class="mt-5 flex flex-col gap-4 items-start text-left">
 										{section.body ? section.body.map((paragraph) => (
-											<p class={`text-sm sm:text-base leading-relaxed ${variantTone.body}`}>{paragraph}</p>
+											<p class="text-sm sm:text-base leading-relaxed text-gray-600 font-normal">{paragraph}</p>
 										)) : null}
 										{section.list && section.list.length ? (
-											<ul class={`list-disc list-inside space-y-1 text-sm sm:text-base leading-relaxed ${variantTone.body} ${listAlign}`}>
+											<ul class="list-disc list-inside space-y-2 text-sm sm:text-base leading-relaxed text-gray-600 font-normal">
 												{section.list.map((item) => (
 													<li>{item}</li>
 												))}
 											</ul>
 										) : null}
 									</div>
-								)}
-							</section>
+								</details>
+							</div>
 						);
-					})()
-				))}
-			</section>
-		) : null}
+					})}
+				</div>
 
-		{notes.length ? (
-			<section class="max-w-4xl mx-auto space-y-2 text-center text-sm text-gray-600">
-				{notes.map((note) => (
-					<p>{note}</p>
-				))}
-			</section>
-		) : null}
+				{/* Notes and Disclaimers */}
+				{(notes.length || disclaimers.length) ? (
+					<div class="space-y-6 text-center mt-10">
+						{notes.length ? (
+							<div class="space-y-2 text-sm sm:text-base font-bold text-gray-900 leading-relaxed max-w-2xl mx-auto tracking-normal">
+								{notes.map((note) => (
+									<p>{note}</p>
+								))}
+							</div>
+						) : null}
 
-		{disclaimers.length ? (
-			<section class="max-w-4xl mx-auto space-y-1 text-center text-xs uppercase tracking-[0.3em] text-gray-500">
-				{disclaimers.map((entry) => (
-					<p>{entry}</p>
-				))}
-			</section>
-		) : null}
+						{disclaimers.length ? (
+							<div class="space-y-1 text-xs sm:text-sm font-normal text-gray-500 leading-relaxed max-w-2xl mx-auto tracking-normal">
+								{disclaimers.map((entry) => (
+									<p>{entry}</p>
+								))}
+							</div>
+						) : null}
+					</div>
+				) : null}
+			</div>
+		) : (
+			<>
+				{hasSections ? (
+					<section class="max-w-5xl mx-auto space-y-12">
+						{product.sections!.map((section, index) => (
+							(() => {
+								const isAccordion = Boolean(section.accordion);
+								const isConsecutiveAccordion = isAccordion && index > 0 && Boolean(product.sections![index - 1].accordion);
+								const isLastAccordion = isAccordion && (index === product.sections!.length - 1 || !product.sections![index + 1].accordion);
+								const borderTone = section.variant === "card" ? "border-neutral-800" : "border-neutral-200";
+
+								const alignClass = section.align === "left" ? "items-start text-left" : "items-center text-center";
+								const variantTone =
+									section.variant === "card"
+										? {
+											wrapper: "bg-neutral-900 text-neutral-100",
+											heading: "text-white",
+											body: "text-neutral-200",
+										}
+									: section.variant === "muted"
+									? {
+											wrapper: "bg-gray-100 text-gray-800",
+											heading: "text-gray-900",
+											body: "text-gray-700",
+										}
+									: {
+											wrapper: "bg-transparent text-gray-700",
+											heading: "text-gray-900",
+											body: "text-gray-600",
+										};
+								const contentAlign = section.align === "left" ? "items-start text-left" : "items-center text-center";
+								const listAlign = section.align === "left" ? "text-left" : "text-left sm:max-w-xl";
+
+								const paddingClass = isAccordion ? "py-5 sm:py-6" : "py-10";
+								const borderClass = isAccordion 
+									? `border-t ${borderTone} ${isLastAccordion ? `border-b ${borderTone}` : ""} ${isConsecutiveAccordion ? "!mt-0" : ""}`
+									: "";
+								return (
+									<section class={`flex w-full flex-col gap-5 px-4 sm:px-10 ${paddingClass} ${borderClass} ${alignClass} ${variantTone.wrapper}`}>
+										{section.accordion ? (
+											<details class="group w-full max-w-3xl" open={section.initiallyOpen ?? false}>
+												<summary class={`flex w-full cursor-pointer items-center justify-between gap-4 text-xs sm:text-sm font-semibold uppercase tracking-[0.35em] ${variantTone.heading}`}>
+													{section.heading ?? "Details"}
+													<span class="text-lg leading-none transition-transform group-open:rotate-45">+</span>
+												</summary>
+												<div class={`mt-5 flex flex-col gap-3 ${contentAlign}`}>
+													{section.body ? section.body.map((paragraph) => (
+														<p class={`text-sm sm:text-base leading-relaxed ${variantTone.body}`}>{paragraph}</p>
+													)) : null}
+													{section.list && section.list.length ? (
+														<ul class={`list-disc list-inside space-y-1 text-sm sm:text-base leading-relaxed ${variantTone.body} ${listAlign}`}>
+															{section.list.map((item) => (
+																<li>{item}</li>
+															))}
+														</ul>
+													) : null}
+												</div>
+											</details>
+										) : (
+											<div class={`flex w-full max-w-3xl flex-col gap-3 ${contentAlign}`}>
+												{section.heading ? (
+													<h3 class={`text-xs sm:text-sm font-semibold uppercase tracking-[0.35em] ${variantTone.heading}`}>{section.heading}</h3>
+												) : null}
+												{section.body ? section.body.map((paragraph) => (
+													<p class={`text-sm sm:text-base leading-relaxed ${variantTone.body}`}>{paragraph}</p>
+												)) : null}
+												{section.list && section.list.length ? (
+													<ul class={`list-disc list-inside space-y-1 text-sm sm:text-base leading-relaxed ${variantTone.body} ${listAlign}`}>
+														{section.list.map((item) => (
+															<li>{item}</li>
+														))}
+													</ul>
+												) : null}
+											</div>
+										)}
+									</section>
+								);
+							})()
+						))}
+					</section>
+				) : null}
+
+				{notes.length ? (
+					<section class="max-w-4xl mx-auto space-y-2 text-center text-sm text-gray-600">
+						{notes.map((note) => (
+							<p>{note}</p>
+						))}
+					</section>
+				) : null}
+
+				{disclaimers.length ? (
+					<section class="max-w-4xl mx-auto space-y-1 text-center text-xs uppercase tracking-[0.3em] text-gray-500">
+						{disclaimers.map((entry) => (
+							<p>{entry}</p>
+						))}
+					</section>
+				) : null}
+			</>
+		)}
 	</main>
 	<Footer />
 </Layout>

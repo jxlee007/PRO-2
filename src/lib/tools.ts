@@ -33,6 +33,12 @@ export interface ProductVideo {
     aspectRatio?: string;
 }
 
+export interface Slide {
+    before: string;
+    after: string;
+    caption: string;
+}
+
 export interface ToolProduct {
     slug: string;
     category?: string;
@@ -51,6 +57,7 @@ export interface ToolProduct {
     video?: ProductVideo;
     disclaimers?: string[];
     notes?: string[];
+    slides?: Slide[];
 }
 
 export const getToolProducts = (): ToolProduct[] => [
@@ -67,20 +74,20 @@ export const getToolProducts = (): ToolProduct[] => [
         price: "$15",
         cta: { label: "Purchase" },
         heroImage: {
-            src: "/images/tools/5j0a9040-awide.jpg",
+            src: "/images/tools/5j0a9040-awide.webp",
             alt: "Signature lens ID stickers arranged in a travel case",
         },
         gallery: [
             {
-                src: "/images/tools/5j0a9056.jpg",
+                src: "/images/tools/5j0a9056.webp",
                 alt: "Applying a lens ID sticker to a camera lens cap",
             },
             {
-                src: "/images/tools/5j0a9033.jpg",
+                src: "/images/tools/5j0a9033.webp",
                 alt: "Lens IDs organized in a camera case",
             },
             {
-                src: "/images/tools/5j0a9028.jpg",
+                src: "/images/tools/5j0a9028.webp",
                 alt: "Close up of Signature Lens IDs sheet",
             },
         ],
@@ -123,15 +130,15 @@ export const getToolProducts = (): ToolProduct[] => [
         price: "$95",
         cta: { label: "Purchase" },
         heroImage: {
-            src: "/images/tools/pmct22kw.jpg",
+            src: "/images/tools/pmct22kw.webp",
             alt: "PM Camera Tool with included accessories",
         },
         gallery: [
-            { src: "/images/tools/pmct2315kw.jpg", alt: "PM Camera Tool open with hex bits" },
-            { src: "/images/tools/pmct2915kw.jpg", alt: "PM Camera Tool detail view" },
-            { src: "/images/tools/0d3a0590nw.jpg", alt: "PM Camera Tool grip detail" },
-            { src: "/images/tools/0d3a0586.jpg", alt: "PM Camera Tool standing upright" },
-            { src: "/images/tools/0d3a0593.jpg", alt: "PM Camera Tool kit on desk" },
+            { src: "/images/tools/pmct2315kw.webp", alt: "PM Camera Tool open with hex bits" },
+            { src: "/images/tools/pmct2915kw.webp", alt: "PM Camera Tool detail view" },
+            { src: "/images/tools/0d3a0590nw.webp", alt: "PM Camera Tool grip detail" },
+            { src: "/images/tools/0d3a0586.webp", alt: "PM Camera Tool standing upright" },
+            { src: "/images/tools/0d3a0593.webp", alt: "PM Camera Tool kit on desk" },
         ],
         video: {
             url: "https://www.youtube.com/embed/ZXZKr8HPqoA?rel=0",
@@ -170,13 +177,13 @@ export const getToolProducts = (): ToolProduct[] => [
             { value: "4k", label: "4K", priceLabel: "$40" },
         ],
         heroImage: {
-            src: "/images/motion-fx/glitchbox.jpg",
+            src: "/images/motion-fx/glitchbox.webp",
             alt: "Glitch effects pack artwork",
         },
         gallery: [
-            { src: "/images/motion-fx/scratchbox.jpg", alt: "Film scratches overlay preview" },
-            { src: "/images/motion-fx/leaksbox.jpg", alt: "Light leaks preview" },
-            { src: "/images/motion-fx/mattebox.jpg", alt: "Film mattes preview" },
+            { src: "/images/motion-fx/scratchbox.webp", alt: "Film scratches overlay preview" },
+            { src: "/images/motion-fx/leaksbox.webp", alt: "Light leaks preview" },
+            { src: "/images/motion-fx/mattebox.webp", alt: "Film mattes preview" },
         ],
         video: {
             url: "https://www.youtube.com/embed/FEffie9IOUY?rel=0",
@@ -218,28 +225,37 @@ export const getToolProducts = (): ToolProduct[] => [
         price: "$40",
         cta: { label: "Purchase" },
         heroImage: {
-            src: "/images/photo-lr-presets/2021v4.jpg",
+            src: "/images/photo-lr-presets/2021v4.webp",
             alt: "PM Lightroom V4 Presets packaging",
         },
         gallery: [
-            { src: "/images/photo-lr-presets/2019v3.jpg", alt: "PM Lightroom V3 presets" },
-            { src: "/images/photo-lr-presets/2018fall.jpg", alt: "PM Lightroom V2 presets" },
-            { src: "/images/photo-lr-presets/2017v1.jpg", alt: "PM Lightroom V1 presets" },
+            { src: "/images/photo-lr-presets/2019v3.webp", alt: "PM Lightroom V3 presets" },
+            { src: "/images/photo-lr-presets/2018fall.webp", alt: "PM Lightroom V2 presets" },
+            { src: "/images/photo-lr-presets/2017v1.webp", alt: "PM Lightroom V1 presets" },
         ],
         sections: [
             {
                 heading: "Install Instructions",
                 body: [
-                    "Extract the ZIP file on your desktop computer (not your phone).",
-                    "Open Lightroom and go to the Presets panel.",
-                    "Choose File → Import Profiles & Presets and select the ZIP file.",
-                    "Restart Lightroom and your presets will appear in the Presets list.",
+                    "Extract the ZIP file (to your desktop computer, not to your phone).",
+                    "Open Lightroom and go to the Presets section. Click on File > Import Profiles & Presets.",
+                    "Select the presets ZIP file(s) and click Import. → Selecting the ZIP file.",
+                    "Restart LR and your presets will now be listed in the Presets section.",
+                    "When in doubt, also feel free to Google/YouTube it.",
                 ],
                 accordion: true,
                 initiallyOpen: true,
             },
             {
-                heading: "Mobile FAQ",
+                heading: "Install Video",
+                body: [
+                    "Watch the step-by-step installation video tutorial on YouTube.",
+                ],
+                accordion: true,
+                initiallyOpen: false,
+            },
+            {
+                heading: "Mobile FAQ's",
                 body: [
                     "Install the presets on the desktop version of Lightroom CC first, then they will auto-sync into the Lightroom CC Mobile app.",
                 ],
@@ -247,11 +263,278 @@ export const getToolProducts = (): ToolProduct[] => [
                 initiallyOpen: false,
             },
         ],
+        notes: [
+            "BEFORE YOU BUY - PLEASE MAKE SURE YOU HAVE THE NEWEST UPDATE FOR ADOBE LIGHTROOM (7.5 OR HIGHER). We have just added support for older versions of lightroom which are included with the files when you purchase!"
+        ],
         disclaimers: [
-            "24 presets included (.xmp format). Zip file delivered shortly after purchase.",
-            "Download to your desktop first—Lightroom will sync to mobile automatically.",
+            "Zip file is sent shortly after purchase. Non refundable.",
+            "Download the files to your DESKTOP LR, NOT on your phone. LR will sync to your mobile app.",
             "Purchased presets are not to be shared or resold in any manner.",
         ],
+        slides: [
+            {
+                before: "/images/photo-lr-presets/400D-PM-Film2klrv4.webp",
+                after: "/images/photo-lr-presets/400D-PM-Film-Edit2klrv4.webp",
+                caption: "400D PM Film"
+            },
+            {
+                before: "/images/photo-lr-presets/160PM-Film2k.webp",
+                after: "/images/photo-lr-presets/160PM-Film-Edited2k.webp",
+                caption: "160PM Film"
+            },
+            {
+                before: "/images/photo-lr-presets/400p-PM-Film2k.webp",
+                after: "/images/photo-lr-presets/400p-PM-Film-Edit2k.webp",
+                caption: "400p PM Film"
+            },
+            {
+                before: "/images/photo-lr-presets/Auto-K-PM-Film2k.webp",
+                after: "/images/photo-lr-presets/Auto-K-PM-Film-Edit2k.webp",
+                caption: "Auto-K PM Film"
+            },
+            {
+                before: "/images/photo-lr-presets/Explore2k.webp",
+                after: "/images/photo-lr-presets/Explore-Edit2k.webp",
+                caption: "Explore"
+            },
+            {
+                before: "/images/photo-lr-presets/Narrow_Path2k.webp",
+                after: "/images/photo-lr-presets/Narrow_PathEdited2k.webp",
+                caption: "Narrow Path"
+            },
+            {
+                before: "/images/photo-lr-presets/Navigate2k.webp",
+                after: "/images/photo-lr-presets/Navigate-Edit2k.webp",
+                caption: "Navigate"
+            },
+            {
+                before: "/images/photo-lr-presets/Seeker2k.webp",
+                after: "/images/photo-lr-presets/Seeker-Edit2k.webp",
+                caption: "Seeker"
+            },
+            {
+                before: "/images/photo-lr-presets/Summit2k.webp",
+                after: "/images/photo-lr-presets/Summit-Edit2k.webp",
+                caption: "Summit"
+            },
+            {
+                before: "/images/photo-lr-presets/WinterSky2k.webp",
+                after: "/images/photo-lr-presets/WinterSkyEdit2k.webp",
+                caption: "Winter Sky"
+            },
+            {
+                before: "/images/photo-lr-presets/bike.webp",
+                after: "/images/photo-lr-presets/bike-edit.webp",
+                caption: "Bike"
+            },
+            {
+                before: "/images/photo-lr-presets/clouds.webp",
+                after: "/images/photo-lr-presets/cloudsedit.webp",
+                caption: "Clouds"
+            },
+            {
+                before: "/images/photo-lr-presets/ford2.webp",
+                after: "/images/photo-lr-presets/ford2edit.webp",
+                caption: "Ford 2"
+            },
+            {
+                before: "/images/photo-lr-presets/girl.webp",
+                after: "/images/photo-lr-presets/girl-edit.webp",
+                caption: "Girl"
+            },
+            {
+                before: "/images/photo-lr-presets/red-rum.webp",
+                after: "/images/photo-lr-presets/red-rum-edit.webp",
+                caption: "Red Rum"
+            },
+            {
+                before: "/images/photo-lr-presets/rock.webp",
+                after: "/images/photo-lr-presets/rockedit.webp",
+                caption: "Rock"
+            },
+            {
+                before: "/images/photo-lr-presets/snow.webp",
+                after: "/images/photo-lr-presets/snobwedit.webp",
+                caption: "Snow"
+            },
+            {
+                before: "/images/photo-lr-presets/watch.webp",
+                after: "/images/photo-lr-presets/watchedit.webp",
+                caption: "Watch"
+            }
+        ]
+    },
+    {
+        slug: "pm-lightroom-presets-v3",
+        category: "Lightroom Presets",
+        title: "PM Lightroom",
+        subtitle: "Presets V3 2019",
+        descriptions: [
+            "The highly anticipated V3 Lightroom presets pack is here. Designed to bring clean tones, moody vibes, and a cohesive aesthetic to your photos with just one click.",
+            "Includes versatile color profiles suitable for landscape, travel, lifestyle, and automotive photography.",
+            "Compatible with Lightroom CC, Lightroom Classic CC, Photoshop CC, and Adobe Camera Raw. Non refundable."
+        ],
+        price: "$40",
+        cta: { label: "Purchase" },
+        heroImage: {
+            src: "/images/photo-lr-presets/2019v3.webp",
+            alt: "PM Lightroom V3 Presets packaging"
+        },
+        sections: [
+            {
+                heading: "Install Instructions",
+                body: [
+                    "Extract the ZIP file (to your desktop computer, not to your phone).",
+                    "Open Lightroom and go to the Presets section. Click on File > Import Profiles & Presets.",
+                    "Select the presets ZIP file(s) and click Import. → Selecting the ZIP file.",
+                    "Restart LR and your presets will now be listed in the Presets section.",
+                    "When in doubt, also feel free to Google/YouTube it."
+                ],
+                accordion: true,
+                initiallyOpen: true
+            },
+            {
+                heading: "Mobile FAQ's",
+                body: [
+                    "Install the presets on the desktop version of Lightroom CC first, then they will auto-sync into the Lightroom CC Mobile app."
+                ],
+                accordion: true,
+                initiallyOpen: false
+            }
+        ],
+        disclaimers: [
+            "15 Presets Included (.xmp format). Zip file is sent shortly after purchase.",
+            "Download the files to your DESKTOP LR, NOT on your phone. LR will sync to your mobile app.",
+            "Purchased presets are not to be shared or resold in any manner."
+        ],
+        slides: [
+            {
+                before: "/images/photo-lr-presets/BeforeTruck-lrv3.webp",
+                after: "/images/photo-lr-presets/AfterTrucklrv3.webp",
+                caption: "Truck"
+            },
+            {
+                before: "/images/photo-lr-presets/CameraBeforelrv3.webp",
+                after: "/images/photo-lr-presets/CameraAfterlrv3.webp",
+                caption: "Camera"
+            },
+            {
+                before: "/images/photo-lr-presets/MTNBeforelrv3.webp",
+                after: "/images/photo-lr-presets/MTNAfterlrv3.webp",
+                caption: "Mountain"
+            },
+            {
+                before: "/images/photo-lr-presets/klrv3.webp",
+                after: "/images/photo-lr-presets/keditlrv3.webp",
+                caption: "Kodak"
+            }
+        ]
+    },
+    {
+        slug: "pm-lightroom-presets-v2",
+        category: "Lightroom Presets",
+        title: "PM Lightroom",
+        subtitle: "Presets V2 2018",
+        descriptions: [
+            "The V2 Lightroom preset pack brings 15 custom color presets and 8 adjustment presets. Bring rich autumn colors, deep blues, and dramatic lighting to your shots.",
+            "Compatible with Lightroom CC, Lightroom Classic CC, Photoshop CC, and Adobe Camera Raw. Non refundable."
+        ],
+        price: "$30",
+        cta: { label: "Purchase" },
+        heroImage: {
+            src: "/images/photo-lr-presets/2018fall.webp",
+            alt: "PM Lightroom V2 Presets packaging"
+        },
+        sections: [
+            {
+                heading: "Install Instructions",
+                body: [
+                    "Extract the ZIP file (to your desktop computer, not to your phone).",
+                    "Open Lightroom and go to the Presets section. Click on File > Import Profiles & Presets.",
+                    "Select the presets ZIP file(s) and click Import. → Selecting the ZIP file.",
+                    "Restart LR and your presets will now be listed in the Presets section.",
+                    "When in doubt, also feel free to Google/YouTube it."
+                ],
+                accordion: true,
+                initiallyOpen: true
+            },
+            {
+                heading: "Mobile FAQ's",
+                body: [
+                    "Install the presets on the desktop version of Lightroom CC first, then they will auto-sync into the Lightroom CC Mobile app."
+                ],
+                accordion: true,
+                initiallyOpen: false
+            }
+        ],
+        disclaimers: [
+            "15 Color Presets + 8 Adjustment Presets Included. Zip file is sent shortly after purchase.",
+            "Download the files to your DESKTOP LR, NOT on your phone. LR will sync to your mobile app.",
+            "Purchased presets are not to be shared or resold in any manner."
+        ],
+        slides: [
+            {
+                before: "/images/photo-lr-presets/hndslrv2.webp",
+                after: "/images/photo-lr-presets/hndeditlrv2.webp",
+                caption: "Hands"
+            }
+        ]
+    },
+    {
+        slug: "pm-lightroom-presets-v1",
+        category: "Lightroom Presets",
+        title: "PM Lightroom",
+        subtitle: "Presets V1 2017",
+        descriptions: [
+            "The original PM Lightroom Preset Pack from 2017. Edit your photos with 1 click using 15 presets with a wide range of color, mood, and style.",
+            "These are the presets Peter uses when editing his own photos, delivering the signature look seen across his channels.",
+            "Compatible with Lightroom CC, Lightroom Classic CC, Photoshop CC, and Adobe Camera Raw. Non refundable."
+        ],
+        price: "$20",
+        cta: { label: "Purchase" },
+        heroImage: {
+            src: "/images/photo-lr-presets/2017v1.webp",
+            alt: "PM Lightroom V1 Presets packaging"
+        },
+        sections: [
+            {
+                heading: "Install Instructions",
+                body: [
+                    "Extract the ZIP file (to your desktop computer, not to your phone).",
+                    "Open Lightroom and go to the Presets section. Click on File > Import Profiles & Presets.",
+                    "Select the presets ZIP file(s) and click Import. → Selecting the ZIP file.",
+                    "Restart LR and your presets will now be listed in the Presets section.",
+                    "When in doubt, also feel free to Google/YouTube it."
+                ],
+                accordion: true,
+                initiallyOpen: true
+            },
+            {
+                heading: "Mobile FAQ's",
+                body: [
+                    "Install the presets on the desktop version of Lightroom CC first, then they will auto-sync into the Lightroom CC Mobile app."
+                ],
+                accordion: true,
+                initiallyOpen: false
+            }
+        ],
+        disclaimers: [
+            "15 Presets Included. Zip file is sent shortly after purchase.",
+            "Download the files to your DESKTOP LR, NOT on your phone. LR will sync to your mobile app.",
+            "Purchased presets are not to be shared or resold in any manner."
+        ],
+        slides: [
+            {
+                before: "/images/photo-lr-presets/red-rum.webp",
+                after: "/images/photo-lr-presets/red-rum-edit.webp",
+                caption: "Red Rum"
+            },
+            {
+                before: "/images/photo-lr-presets/Fordlrv1.webp",
+                after: "/images/photo-lr-presets/Fordeditlrv1.webp",
+                caption: "Ford"
+            }
+        ]
     },
     {
         slug: "cine-luts-v1",
@@ -264,7 +547,7 @@ export const getToolProducts = (): ToolProduct[] => [
         price: "$15",
         cta: { label: "Purchase" },
         heroImage: {
-            src: "/images/cineluts/cinelutsv1.jpg",
+            src: "/images/cineluts/cinelutsv1.webp",
             alt: "Cine LUTS V1 pack artwork",
         },
         sections: [
@@ -320,7 +603,7 @@ export const getToolProducts = (): ToolProduct[] => [
         price: "$15",
         cta: { label: "Purchase" },
         heroImage: {
-            src: "/images/pm-sound-pack-v1.jpg",
+            src: "/images/pm-sound-pack-v1.webp",
             alt: "PM Sound Pack V1 cover art",
         },
         sections: [

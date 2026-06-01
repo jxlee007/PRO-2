@@ -1,0 +1,312 @@
+---
+// BeforeAfterSlider.astro - Custom Before/After Image Comparison Slider
+import { withBase } from "../lib/utils";
+
+interface Slide {
+    before: string;
+    after: string;
+    caption: string;
+}
+
+interface Props {
+    slides?: Slide[];
+}
+
+const { slides: propSlides } = Astro.props;
+
+const defaultSlides: Slide[] = [
+    {
+        before: "/images/photo-lr-presets/400D-PM-Film2klrv4.webp",
+        after: "/images/photo-lr-presets/400D-PM-Film-Edit2klrv4.webp",
+        caption: "400D PM Film"
+    },
+    {
+        before: "/images/photo-lr-presets/160PM-Film2k.webp",
+        after: "/images/photo-lr-presets/160PM-Film-Edited2k.webp",
+        caption: "160PM Film"
+    },
+    {
+        before: "/images/photo-lr-presets/Auto-K-PM-Film2k.webp",
+        after: "/images/photo-lr-presets/Auto-K-PM-Film-Edit2k.webp",
+        caption: "Auto-K PM Film"
+    },
+    {
+        before: "/images/photo-lr-presets/Explore2k.webp",
+        after: "/images/photo-lr-presets/Explore-Edit2k.webp",
+        caption: "Explore"
+    },
+    {
+        before: "/images/photo-lr-presets/Narrow_Path2k.webp",
+        after: "/images/photo-lr-presets/Narrow_PathEdited2k.webp",
+        caption: "Narrow Path"
+    },
+    {
+        before: "/images/photo-lr-presets/Navigate2k.webp",
+        after: "/images/photo-lr-presets/Navigate-Edit2k.webp",
+        caption: "Navigate"
+    },
+    {
+        before: "/images/photo-lr-presets/Seeker2k.webp",
+        after: "/images/photo-lr-presets/Seeker-Edit2k.webp",
+        caption: "Seeker"
+    },
+    {
+        before: "/images/photo-lr-presets/Summit2k.webp",
+        after: "/images/photo-lr-presets/Summit-Edit2k.webp",
+        caption: "Summit"
+    },
+    {
+        before: "/images/photo-lr-presets/WinterSky2k.webp",
+        after: "/images/photo-lr-presets/WinterSkyEdit2k.webp",
+        caption: "Winter Sky"
+    }
+];
+
+const slides = propSlides && propSlides.length > 0 ? propSlides : defaultSlides;
+---
+
+<div class="before-after-slider-container w-full max-w-4xl mx-auto space-y-4" data-total-slides={slides.length}>
+    <!-- Active Slider Window -->
+    <div class="relative overflow-hidden aspect-[4/3] w-full rounded-md shadow-lg bg-neutral-900 slider-main-window">
+        {slides.map((slide, idx) => (
+            <div 
+                class={`absolute inset-0 w-full h-full comparison-slide transition-opacity duration-300 ${idx === 0 ? "opacity-100 z-10" : "opacity-0 pointer-events-none z-0"}`}
+                data-index={idx}
+                data-caption={slide.caption}
+            >
+                <!-- Before Image (Base) -->
+                <img 
+                    src={withBase(slide.before)} 
+                    alt={`${slide.caption} Before`} 
+                    class="absolute inset-0 w-full h-full object-cover select-none pointer-events-none" 
+                />
+                
+                <!-- After Image (Overlay, Clipped) -->
+                <div class="absolute inset-0 w-full h-full overflow-hidden after-image-container" style="clip-path: inset(0 0 0 50%);">
+                    <img 
+                        src={withBase(slide.after)} 
+                        alt={`${slide.caption} After`} 
+                        class="absolute inset-0 w-full h-full object-cover select-none pointer-events-none" 
+                    />
+                </div>
+
+                <!-- Divider Line -->
+                <div class="absolute top-0 bottom-0 w-[2px] bg-white z-20 shadow-md divider-line" style="left: 50%;"></div>
+
+                <!-- Drag Handle Carriage -->
+                <div class="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-10 h-10 rounded-full bg-white shadow-xl border border-neutral-200/50 flex items-center justify-center cursor-ew-resize select-none pointer-events-none z-20 drag-handle" style="left: 50%;">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="text-neutral-800">
+                        <polyline points="15 18 9 12 15 6"></polyline>
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                </div>
+
+                <!-- Labels -->
+                <div class="absolute bottom-4 left-4 bg-black/50 text-white text-[10px] sm:text-xs font-bold uppercase tracking-[0.2em] px-3 py-1.5 rounded-sm select-none z-20 pointer-events-none">
+                    BEFORE
+                </div>
+                <div class="absolute bottom-4 right-4 bg-black/50 text-white text-[10px] sm:text-xs font-bold uppercase tracking-[0.2em] px-3 py-1.5 rounded-sm select-none z-20 pointer-events-none">
+                    AFTER
+                </div>
+
+                <!-- Range Input Controller -->
+                <input 
+                    type="range" 
+                    min="0" 
+                    max="100" 
+                    value="50" 
+                    class="absolute inset-0 w-full h-full opacity-0 cursor-ew-resize z-30 m-0 p-0 range-controller" 
+                    aria-label="Drag to compare before and after"
+                />
+            </div>
+        ))}
+
+        <!-- Fullscreen Button -->
+        <button class="absolute top-4 right-4 border border-white/40 bg-black/40 hover:bg-black/60 text-white flex items-center justify-center w-10 h-10 hover:border-white transition-colors focus:outline-none rounded-md z-30 fullscreen-btn" aria-label="Toggle fullscreen view">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" width="22" height="22" class="text-white" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M26 8a2 2 0 0 1 2 2v6h-2v-5a1 1 0 0 0-.883-.993L25 10h-5V8h6zM10 8a2 2 0 0 0-2 2v6h2v-5a1 1 0 0 1 .883-.993L11 10h5V8h-6zm16 20a2 2 0 0 0 2-2v-6h-2v5a1 1 0 0 1-.883.993L25 26h-5v2h6zm-16 0a2 2 0 0 1-2-2v-6h2v5a1 1 0 0 0 .883.993L11 26h5v2h-6z" fill="currentColor" stroke="none"></path>
+            </svg>
+        </button>
+    </div>
+
+    <!-- Navigation & Caption Bar -->
+    <div class="flex items-center justify-between py-3 border-t border-neutral-100 select-none">
+        <!-- Slide Count -->
+        <div class="text-xs sm:text-sm font-semibold text-neutral-500 tracking-wider slider-count">
+            1 / {slides.length}
+        </div>
+
+        <!-- Caption -->
+        <div class="text-sm font-semibold text-neutral-800 tracking-wide slider-caption">
+            {slides[0]?.caption}
+        </div>
+
+        <!-- Arrow Buttons -->
+        <div class="flex items-center gap-2 navigation-arrows">
+            <!-- Prev Button -->
+            <button class="arrow-prev border border-neutral-200 hover:border-neutral-800 flex items-center justify-center w-10 h-10 hover:bg-neutral-50 transition-colors focus:outline-none hidden" aria-label="Previous slide">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28" width="22" height="22" class="text-neutral-800 rotate-180">
+                    <path fill-rule="evenodd" d="M16.36 7.232a1 1 0 0 1 1.408.128l5 6a1 1 0 0 1 0 1.28l-5 6a1 1 0 1 1-1.536-1.28L19.864 15H6a1 1 0 1 1 0-2h13.865l-3.633-4.36a1 1 0 0 1 .036-1.322z" fill="currentColor"></path>
+                </svg>
+            </button>
+            
+            <!-- Next Button -->
+            <button class="arrow-next border border-neutral-200 hover:border-neutral-800 flex items-center justify-center w-10 h-10 hover:bg-neutral-50 transition-colors focus:outline-none" aria-label="Next slide">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28" width="22" height="22" class="text-neutral-800">
+                    <path fill-rule="evenodd" d="M16.36 7.232a1 1 0 0 1 1.408.128l5 6a1 1 0 0 1 0 1.28l-5 6a1 1 0 1 1-1.536-1.28L19.864 15H6a1 1 0 1 1 0-2h13.865l-3.633-4.36a1 1 0 0 1 .036-1.322z" fill="currentColor"></path>
+                </svg>
+            </button>
+        </div>
+    </div>
+</div>
+
+<style>
+    .slider-main-window input[type="range"] {
+        -webkit-appearance: none;
+        appearance: none;
+        background: transparent;
+        margin: 0;
+        padding: 0;
+        outline: none;
+    }
+    .slider-main-window input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 40px;
+        height: 100%;
+        cursor: ew-resize;
+    }
+    .slider-main-window input[type="range"]::-moz-range-thumb {
+        width: 40px;
+        height: 100%;
+        cursor: ew-resize;
+        background: transparent;
+        border: none;
+    }
+
+    /* Fullscreen mode styling */
+    .slider-main-window:fullscreen {
+        background-color: #0c0c0c;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100vw;
+        height: 100vh;
+        border-radius: 0;
+    }
+    .slider-main-window:fullscreen .comparison-slide {
+        aspect-ratio: auto;
+        width: 100%;
+        height: 100%;
+        max-width: 100%;
+        max-height: 100%;
+    }
+</style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const sliderContainers = document.querySelectorAll(".before-after-slider-container");
+        
+        sliderContainers.forEach(container => {
+            const slides = container.querySelectorAll(".comparison-slide");
+            const totalSlides = parseInt(container.getAttribute("data-total-slides") || "0");
+            let currentIndex = 0;
+
+            // UI Elements
+            const countEl = container.querySelector(".slider-count");
+            const captionEl = container.querySelector(".slider-caption");
+            const btnPrev = container.querySelector(".arrow-prev") as HTMLButtonElement | null;
+            const btnNext = container.querySelector(".arrow-next") as HTMLButtonElement | null;
+            const btnFullscreen = container.querySelector(".fullscreen-btn") as HTMLButtonElement | null;
+            const mainWindow = container.querySelector(".slider-main-window") as HTMLDivElement | null;
+
+            // Update visible slide and pagination text
+            function updateSlider() {
+                slides.forEach((slide, idx) => {
+                    if (idx === currentIndex) {
+                        slide.classList.remove("opacity-0", "pointer-events-none", "z-0");
+                        slide.classList.add("opacity-100", "z-10");
+                        
+                        // Update caption
+                        const caption = slide.getAttribute("data-caption") || "";
+                        if (captionEl) captionEl.textContent = caption;
+                    } else {
+                        slide.classList.remove("opacity-100", "z-10");
+                        slide.classList.add("opacity-0", "pointer-events-none", "z-0");
+                    }
+                });
+
+                // Update count text
+                if (countEl) {
+                    countEl.textContent = `${currentIndex + 1} / ${totalSlides}`;
+                }
+
+                // Show/hide arrows based on index (Page 1 = only next, Page N = only prev, Middle = both)
+                if (btnPrev && btnNext) {
+                    if (currentIndex === 0) {
+                        btnPrev.classList.add("hidden");
+                        btnNext.classList.remove("hidden");
+                    } else if (currentIndex === totalSlides - 1) {
+                        btnPrev.classList.remove("hidden");
+                        btnNext.classList.add("hidden");
+                    } else {
+                        btnPrev.classList.remove("hidden");
+                        btnNext.classList.remove("hidden");
+                    }
+                }
+            }
+
+            // Bind slider range input drag events
+            slides.forEach(slide => {
+                const rangeInput = slide.querySelector(".range-controller") as HTMLInputElement | null;
+                const afterContainer = slide.querySelector(".after-image-container") as HTMLDivElement | null;
+                const divider = slide.querySelector(".divider-line") as HTMLDivElement | null;
+                const handle = slide.querySelector(".drag-handle") as HTMLDivElement | null;
+
+                if (rangeInput && afterContainer && divider && handle) {
+                    const updateComparison = () => {
+                        const val = rangeInput.value;
+                        afterContainer.style.clipPath = `inset(0 0 0 ${val}%)`;
+                        divider.style.left = `${val}%`;
+                        handle.style.left = `${val}%`;
+                    };
+
+                    rangeInput.addEventListener("input", updateComparison);
+                    rangeInput.addEventListener("change", updateComparison);
+                }
+            });
+
+            // Prev slide event handler
+            btnPrev?.addEventListener("click", () => {
+                if (currentIndex > 0) {
+                    currentIndex--;
+                    updateSlider();
+                }
+            });
+
+            // Next slide event handler
+            btnNext?.addEventListener("click", () => {
+                if (currentIndex < totalSlides - 1) {
+                    currentIndex++;
+                    updateSlider();
+                }
+            });
+
+            // Fullscreen click handler
+            btnFullscreen?.addEventListener("click", () => {
+                if (mainWindow) {
+                    if (!document.fullscreenElement) {
+                        mainWindow.requestFullscreen().catch(err => {
+                            console.error("Error attempting to enable fullscreen:", err);
+                        });
+                    } else {
+                        document.exitFullscreen();
+                    }
+                }
+            });
+
+            // Initial view update
+            updateSlider();
+        });
+    });
+</script>

@@ -28,7 +28,7 @@ import { withBase } from "../lib/utils";
 
       <form
         class="w-full flex flex-col sm:flex-row items-center justify-center gap-3 mt-2"
-        onsubmit="event.preventDefault()"
+        onsubmit="event.preventDefault(); const email = this.querySelector('input').value; if (email) { alert(`Subscription successful! Thank you for subscribing with: ${email}`); this.reset(); }"
       >
         <label for="t1" class="sr-only">Email address</label>
         <input
@@ -93,7 +93,7 @@ import { withBase } from "../lib/utils";
       <!-- keep the pirate skull link, image expected to be served from public root -->
       <Link href="/pirates-life" class="inline-block" aria-label="Pirate life">
         <img
-          src={withBase("/images/skull.png")}
+          src={withBase("/images/skull.webp")}
           style="width: 1.3vw;"
           alt="pirate"
         />

@@ -2,13 +2,14 @@
 import Layout from "../layouts/Layout.astro";
 import Nav from "../components/Nav.astro";
 import Footer from "../components/Footer.astro";
+import { withBase } from "../lib/utils";
 
 const data = [
     {
         category: "Automotive",
         items: [
             {
-                img: "/images/prints/ford+gt+after.jpg",
+                img: "/images/prints/ford+gt+after.webp",
                 alt: "Ford GT print",
                 title: "Ford GT",
                 subtitle: "Limited edition (250)",
@@ -16,7 +17,7 @@ const data = [
                 href: "/prints/ford-gt",
             },
             {
-                img: "/images/prints/redbull.jpg",
+                img: "/images/prints/redbull.webp",
                 alt: "F1 Red Bull print",
                 title: "F1 Red Bull",
                 subtitle: "Sold out",
@@ -29,7 +30,7 @@ const data = [
         category: "Travel",
         items: [
             {
-                img: "/images/prints/parisbanner3k.jpg",
+                img: "/images/prints/parisbanner3k.webp",
                 alt: "Paris print",
                 title: "Paris",
                 subtitle: "Limited edition (23)",
@@ -42,7 +43,7 @@ const data = [
         category: "Winter Series",
         items: [
             {
-                img: "/images/prints/mfog.jpg",
+                img: "/images/prints/mfog.webp",
                 alt: "Morning Fog print",
                 title: "Morning Fog",
                 subtitle: "Limited edition (250)",
@@ -50,7 +51,7 @@ const data = [
                 href: "/prints/morning-fog",
             },
             {
-                img: "/images/prints/bucket+shot.jpg",
+                img: "/images/prints/bucket+shot.webp",
                 alt: "The Bucket Shot print",
                 title: "The Bucket Shot",
                 subtitle: "Sold out",
@@ -58,7 +59,7 @@ const data = [
                 href: "/prints/the-bucket-shot",
             },
             {
-                img: "/images/prints/strenght.jpg",
+                img: "/images/prints/strenght.webp",
                 alt: "Strength In Numbers print",
                 title: "Strength In Numbers",
                 subtitle: "Limited edition (250)",
@@ -72,13 +73,13 @@ const data = [
 
 <Layout title="PM Prints — Limited Edition">
     <main class="px-4 sm:px-8 py-12">
-        <div class="w-full"><Nav logo="/images/digisign/ds1-black.png" /></div>
+        <div class="w-full"><Nav logo="/images/digisign/ds1-black.webp" /></div>
 
         <!-- Hero -->
         <section class="mt-8">
             <div class="relative max-w-6xl mx-auto overflow-hidden">
                 <img
-                    src="/images/prints/saltflats.jpg"
+                    src={withBase("/images/prints/saltflats.webp")}
                     alt="Official PM Prints"
                     class="w-full h-56 sm:h-72 md:h-96 object-cover brightness-90"
                 />
@@ -115,12 +116,12 @@ const data = [
                                 class={`relative mt-8 ${cIdx === data.length - 1 && iIdx === cat.items.length - 1 ? "mb-12" : ""}`}
                             >
                                 <a
-                                    href={item.href}
+                                    href={withBase(item.href)}
                                     class="group block no-underline"
                                     aria-label={item.title}
-                                >
+                                  >
                                     <img
-                                        src={item.img}
+                                        src={withBase(item.img)}
                                         alt={item.alt}
                                         class={`w-full h-48 sm:h-64 md:h-72 lg:h-80 object-cover brightness-90 transition-transform duration-300 group-hover:scale-105 ${item.extraImgClass ?? ""}`}
                                     />

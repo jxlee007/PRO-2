@@ -8,5 +8,9 @@ export function withBase(path: string): string {
     // Remove trailing slash from base and leading slash from path to avoid double slashes
     const cleanBase = base.endsWith('/') ? base.slice(0, -1) : base;
     const cleanPath = path.startsWith('/') ? path : `/${path}`;
+    
+    if (cleanBase && cleanPath.startsWith(cleanBase + '/')) {
+        return cleanPath;
+    }
     return `${cleanBase}${cleanPath}`;
 }

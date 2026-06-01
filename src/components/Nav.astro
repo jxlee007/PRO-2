@@ -4,18 +4,25 @@ import { withBase } from "../lib/utils";
 
 interface Props {
     logo?: string;
+    absolute?: boolean;
 }
 
-const { logo = withBase("/images/digisign/ds1-white.png") } = Astro.props;
+const { logo = "/images/digisign/ds1-white.webp", absolute = false } = Astro.props;
+const logoSrc = withBase(logo);
+
+// Detect if theme is dark (e.g. logo is black)
+const isDark = logo.includes("black");
+const textColor = isDark ? "text-neutral-800 hover:text-black font-semibold" : "text-white/90 hover:text-white";
+const hamburgerColor = isDark ? "bg-neutral-800" : "bg-white";
 ---
 
-<nav class="absolute top-0 left-0 right-0 z-50">
+<nav class={absolute ? "absolute top-0 left-0 right-0 z-50" : "relative w-full z-50 bg-white"} style="padding: 0.5rem 1.5rem;">
     <div
-        class="w-full mx-auto flex items-center justify-between px-2 py-6 relative"
+        class="w-full mx-auto flex items-center justify-between relative py-6 px-10"
     >
         <div id="digisign" class="cursor-pointer w-28 z-50">
             <Link href="/">
-                <img src={logo} alt="autograph" class="w-full" />
+                <img src={logoSrc} alt="autograph" class="w-full" />
             </Link>
         </div>
 
@@ -26,13 +33,13 @@ const { logo = withBase("/images/digisign/ds1-white.png") } = Astro.props;
             aria-label="Toggle menu"
         >
             <span
-                class="hamburger-line w-7 h-0.5 bg-white transition-all duration-300"
+                class={`hamburger-line w-7 h-0.5 transition-all duration-300 ${hamburgerColor}`}
             ></span>
             <span
-                class="hamburger-line w-7 h-0.5 bg-white transition-all duration-300"
+                class={`hamburger-line w-7 h-0.5 transition-all duration-300 ${hamburgerColor}`}
             ></span>
             <span
-                class="hamburger-line w-7 h-0.5 bg-white transition-all duration-300"
+                class={`hamburger-line w-7 h-0.5 transition-all duration-300 ${hamburgerColor}`}
             ></span>
         </button>
 
@@ -42,33 +49,32 @@ const { logo = withBase("/images/digisign/ds1-white.png") } = Astro.props;
                 <Link
                     href="/shop"
                     id="hoverlist"
-                    class="uppercase text-white tracking-wide text-sm"
+                    class={`uppercase tracking-wide text-sm ${textColor}`}
                     >shop</Link
                 >
                 <span
                     id="hiddenlist"
-                    class="absolute left-0 mt-2 hidden bg-transparent"
+                    class={`absolute left-0 mt-2 hidden p-2 rounded shadow-md border ${isDark ? 'bg-white border-neutral-200' : 'bg-neutral-900 border-neutral-800'}`}
                 >
                     <!-- kept for parity with original markup; show via hover JS/CSS if desired -->
-                    <Link href="/shop" class="block">all</Link>
-                    <Link href="/prints" class="block">prints</Link>
-                    <Link href="/shop/photo-preset" class="block"
+                    <Link href="/shop" class={`block text-xs py-1 ${isDark ? 'text-neutral-800 hover:text-black' : 'text-neutral-300 hover:text-white'}`}>all</Link>
+                    <Link href="/prints" class={`block text-xs py-1 ${isDark ? 'text-neutral-800 hover:text-black' : 'text-neutral-300 hover:text-white'}`}>prints</Link>
+                    <Link href="/shop/photo-preset" class={`block text-xs py-1 ${isDark ? 'text-neutral-800 hover:text-black' : 'text-neutral-300 hover:text-white'}`}
                         >lr presets</Link
                     >
-                    <Link href="/shop/luts" class="block">video luts</Link>
-                    <Link href="/shop/motion-gfx" class="block">motion gfx</Link
-                    >
-                    <Link href="/shop/sound-packs" class="block">sound fx</Link>
-                    <Link href="/shop/gear" class="block">gear</Link>
+                    <Link href="/shop/luts" class={`block text-xs py-1 ${isDark ? 'text-neutral-800 hover:text-black' : 'text-neutral-300 hover:text-white'}`}>video luts</Link>
+                    <Link href="/shop/motion-gfx" class={`block text-xs py-1 ${isDark ? 'text-neutral-800 hover:text-black' : 'text-neutral-300 hover:text-white'}`}>motion gfx</Link>
+                    <Link href="/shop/sound-packs" class={`block text-xs py-1 ${isDark ? 'text-neutral-800 hover:text-black' : 'text-neutral-300 hover:text-white'}`}>sound fx</Link>
+                    <Link href="/shop/gear" class={`block text-xs py-1 ${isDark ? 'text-neutral-800 hover:text-black' : 'text-neutral-300 hover:text-white'}`}>gear</Link>
                 </span>
             </div>
 
-            <Link href="/collabs" class="uppercase text-white text-sm"
+            <Link href="/collabs" class={`uppercase text-sm ${textColor}`}
                 >collabs</Link
             >
-            <Link href="/about" class="uppercase text-white text-sm">about</Link
+            <Link href="/about" class={`uppercase text-sm ${textColor}`}>about</Link
             >
-            <Link href="/contact" class="uppercase text-white text-sm"
+            <Link href="/contact" class={`uppercase text-sm ${textColor}`}
                 >contact</Link
             >
         </div>

@@ -3,16 +3,17 @@ import Layout from "../layouts/Layout.astro";
 import Nav from "../components/Nav.astro";
 import Footer from "../components/Footer.astro";
 import Link from '../components/Link.astro';
+import { withBase } from "../lib/utils";
 
 const images = [
-  "/images/about/abt-2.jpg",
-  "/images/about/abt-3.jpg",
-  "/images/about/abt-1.jpg",
+  withBase("/images/about/abt-2.webp"),
+  withBase("/images/about/abt-3.webp"),
+  withBase("/images/about/abt-1.webp"),
 ];
 ---
 
 <Layout title="About">
-  <Nav logo="/images/digisign/ds1-black.png" />
+  <Nav logo="/images/digisign/ds1-black.webp" />
 
   <main class="px-6 sm:px-12 py-16">
     <div class="max-w-6xl mx-auto">
@@ -40,7 +41,7 @@ const images = [
             <a class="text-xl hover:text-black" href="#" aria-label="Facebook"><i class="ri-facebook-fill"></i></a>
             <a class="text-xl hover:text-black" href="#" aria-label="Twitter"><i class="ri-twitter-fill"></i></a>
             <Link href="/pirates-life" class="inline-block" aria-label="Pirate life">
-                <img src="/images/skull.png" class="w-4 h-6" alt="pirate"  />
+                <img src={withBase("/images/skull.webp")} class="w-4 h-6" alt="pirate"  />
             </Link>
           </div>
         </div>

@@ -5,7 +5,7 @@ import Link from "../components/Link.astro";
 import Layout from "../layouts/Layout.astro";
 import { withBase } from "../lib/utils";
 
-const logo = withBase("/images/digisign/ds1-white.png");
+const logo = withBase("/images/digisign/ds1-white.webp");
 
 // Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
 // Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
@@ -19,7 +19,7 @@ const logo = withBase("/images/digisign/ds1-white.png");
       <div id="digisign" class="cursor-pointer w-28 z-50">
         <Link href="/">
           <img
-            src={logo ?? "/images/digisign/ds1-white.png"}
+            src={logo ?? "/images/digisign/ds1-white.webp"}
             alt="autograph"
             class="w-full"
           />

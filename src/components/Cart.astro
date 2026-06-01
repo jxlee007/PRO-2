@@ -1,0 +1,280 @@
+---
+// Cart.astro - Right-side sliding cart drawer
+import { withBase } from '../lib/utils';
+---
+
+<!-- Cart Drawer Overlay -->
+<div id="cart-overlay" class="fixed inset-0 bg-black/40 z-[90] opacity-0 pointer-events-none transition-opacity duration-300"></div>
+
+<!-- Cart Drawer Sidebar -->
+<div id="cart-sidebar" class="fixed top-0 right-0 h-full w-full max-w-md bg-white shadow-2xl z-[100] transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col font-sans">
+    
+    <!-- Cart Header -->
+    <div class="flex items-center justify-between px-6 py-6 border-b border-neutral-100 bg-white">
+        <div></div>
+        <span class="text-sm font-bold uppercase tracking-[0.2em] text-neutral-800 absolute left-1/2 -translate-x-1/2 pointer-events-none">Cart</span>
+        <button id="cart-close-btn" class="border border-neutral-900 flex items-center justify-center w-10 h-10 hover:bg-neutral-50 transition-colors focus:outline-none font-bold text-xs text-neutral-900" aria-label="Close cart">
+            ✕
+        </button>
+    </div>
+
+    <!-- Cart Body (Scrollable) -->
+    <div id="cart-items-container" class="flex-1 overflow-y-auto px-6 py-6 space-y-6 bg-white">
+        <!-- Dynamic content injected here -->
+    </div>
+
+    <!-- Cart Footer (Fixed at the bottom) -->
+    <div id="cart-footer" class="border-t border-neutral-100 p-6 bg-white space-y-4">
+        <div class="flex items-center justify-between text-base font-semibold text-neutral-900">
+            <span class="uppercase tracking-wider text-xs font-bold text-neutral-500">Subtotal</span>
+            <span id="cart-subtotal" class="text-lg font-bold">$0.00</span>
+        </div>
+        <button id="cart-checkout-btn" class="w-full bg-yellow-400 hover:bg-yellow-300 text-neutral-900 font-bold py-4 text-center uppercase tracking-widest text-xs transition-colors duration-200 focus:outline-none">
+            Checkout
+        </button>
+    </div>
+</div>
+
+<script>
+    // Client-side Cart State Management
+    interface CartItem {
+        title: string;
+        image: string;
+        price: string;
+        option: string;
+        quantity: number;
+    }
+
+    let cart: CartItem[] = [];
+
+    // Helper to format path
+    function withBase(path: string): string {
+        const base = "/PRO-2"; // Hardcoded base to match utilities
+        const cleanPath = path.startsWith('/') ? path : `/${path}`;
+        if (cleanPath.startsWith(base + '/')) return cleanPath;
+        return `${base}${cleanPath}`;
+    }
+
+    // Load cart from localStorage
+    function loadCart() {
+        try {
+            const stored = localStorage.getItem('cart');
+            cart = stored ? JSON.parse(stored) : [];
+        } catch (e) {
+            cart = [];
+        }
+    }
+
+    // Save cart to localStorage
+    function saveCart() {
+        localStorage.setItem('cart', JSON.stringify(cart));
+    }
+
+    // Open/Close Cart Sidebar animations
+    function openCart() {
+        const sidebar = document.getElementById('cart-sidebar');
+        const overlay = document.getElementById('cart-overlay');
+        if (sidebar && overlay) {
+            sidebar.classList.remove('translate-x-full');
+            overlay.classList.remove('pointer-events-none', 'opacity-0');
+            overlay.classList.add('opacity-100');
+            document.body.style.overflow = 'hidden';
+        }
+    }
+
+    function closeCart() {
+        const sidebar = document.getElementById('cart-sidebar');
+        const overlay = document.getElementById('cart-overlay');
+        if (sidebar && overlay) {
+            sidebar.classList.add('translate-x-full');
+            overlay.classList.remove('opacity-100');
+            overlay.classList.add('opacity-0', 'pointer-events-none');
+            document.body.style.overflow = '';
+        }
+    }
+
+    // Helper to parse price string to number
+    function parsePriceValue(priceStr: string): number {
+        const clean = priceStr.replace(/[^0-9.]/g, '');
+        const val = parseFloat(clean);
+        return isNaN(val) ? 0 : val;
+    }
+
+    // Helper to extract option price if present
+    function parsePrice(priceStr: string, optionStr: string): string {
+        if (optionStr && optionStr.includes('— $')) {
+            const parts = optionStr.split('— $');
+            return '$' + parts[parts.length - 1].trim();
+        }
+        return priceStr || '$0.00';
+    }
+
+    // Render cart items dynamically
+    function renderCart() {
+        const container = document.getElementById('cart-items-container');
+        const subtotalEl = document.getElementById('cart-subtotal');
+        const checkoutBtn = document.getElementById('cart-checkout-btn') as HTMLButtonElement;
+        
+        if (!container) return;
+
+        if (cart.length === 0) {
+            container.innerHTML = `
+                <div class="h-full flex flex-col items-center justify-center text-center py-20">
+                    <p class="text-neutral-500 font-medium text-sm">Your cart is empty.</p>
+                </div>
+            `;
+            if (subtotalEl) subtotalEl.textContent = '$0.00';
+            if (checkoutBtn) {
+                checkoutBtn.disabled = true;
+                checkoutBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            }
+            return;
+        }
+
+        if (checkoutBtn) {
+            checkoutBtn.disabled = false;
+            checkoutBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+        }
+
+        let total = 0;
+        container.innerHTML = cart.map((item, idx) => {
+            const itemPriceValue = parsePriceValue(item.price);
+            total += itemPriceValue * item.quantity;
+            
+            return `
+                <div class="flex items-start gap-4 pb-6 border-b border-neutral-100 last:border-b-0 last:pb-0 animate-fadeIn">
+                    <div class="w-20 h-20 shrink-0 overflow-hidden bg-neutral-50 border border-neutral-100 rounded-sm">
+                        <img src="${withBase(item.image)}" alt="${item.title}" class="w-full h-full object-cover" />
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <h4 class="text-sm font-semibold text-neutral-900 truncate">${item.title}</h4>
+                        ${item.option ? `<p class="text-xs text-neutral-400 mt-0.5 truncate">${item.option}</p>` : ''}
+                        <div class="flex items-center justify-between mt-3">
+                            <!-- Quantity selector -->
+                            <div class="flex items-center border border-neutral-200 rounded-sm">
+                                <button class="px-2 py-0.5 text-xs text-neutral-500 hover:bg-neutral-50 transition-colors font-semibold" data-cart-action="decrement" data-cart-index="${idx}">-</button>
+                                <span class="px-3 py-0.5 text-xs font-semibold text-neutral-800 border-x border-neutral-200">${item.quantity}</span>
+                                <button class="px-2 py-0.5 text-xs text-neutral-500 hover:bg-neutral-50 transition-colors font-semibold" data-cart-action="increment" data-cart-index="${idx}">+</button>
+                            </div>
+                            <span class="text-sm font-bold text-neutral-900">${item.price}</span>
+                        </div>
+                    </div>
+                    <button class="text-neutral-300 hover:text-neutral-500 transition-colors p-1" data-cart-action="remove" data-cart-index="${idx}" aria-label="Remove item">
+                        ✕
+                    </button>
+                </div>
+            `;
+        }).join('');
+
+        if (subtotalEl) {
+            subtotalEl.textContent = `$${total.toFixed(2)}`;
+        }
+    }
+
+    // Add item to cart
+    function addToCart(title: string, image: string, price: string, option: string) {
+        const finalPrice = parsePrice(price, option);
+        const item: CartItem = {
+            title,
+            image,
+            price: finalPrice,
+            option,
+            quantity: 1
+        };
+
+        const existingIdx = cart.findIndex(i => i.title === item.title && i.option === item.option);
+        if (existingIdx > -1) {
+            cart[existingIdx].quantity += 1;
+        } else {
+            cart.push(item);
+        }
+
+        saveCart();
+        renderCart();
+        openCart();
+    }
+
+    // Document setup and events
+    document.addEventListener("DOMContentLoaded", () => {
+        loadCart();
+        renderCart();
+
+        // Close button click
+        document.getElementById('cart-close-btn')?.addEventListener('click', closeCart);
+        document.getElementById('cart-overlay')?.addEventListener('click', closeCart);
+
+        // Event delegation for purchase buttons on pages
+        document.addEventListener('click', (e) => {
+            const target = e.target as HTMLElement;
+            const purchaseBtn = target.closest('[data-cart-add]');
+            if (purchaseBtn) {
+                e.preventDefault();
+                const title = purchaseBtn.getAttribute('data-product-title') || '';
+                const image = purchaseBtn.getAttribute('data-product-image') || '';
+                const price = purchaseBtn.getAttribute('data-product-price') || '';
+                const selectId = purchaseBtn.getAttribute('data-product-select-id') || '';
+
+                let selectedOption = '';
+                if (selectId) {
+                    const selectEl = document.getElementById(selectId) as HTMLSelectElement | null;
+                    if (selectEl) {
+                        selectedOption = selectEl.options[selectEl.selectedIndex].text;
+                    }
+                }
+                addToCart(title, image, price, selectedOption);
+            }
+        });
+
+        // Event delegation inside cart (increment, decrement, remove)
+        document.getElementById('cart-items-container')?.addEventListener('click', (e) => {
+            const target = e.target as HTMLElement;
+            const actionBtn = target.closest('[data-cart-action]');
+            if (actionBtn) {
+                const action = actionBtn.getAttribute('data-cart-action');
+                const idxStr = actionBtn.getAttribute('data-cart-index');
+                if (idxStr !== null) {
+                    const idx = parseInt(idxStr);
+                    if (action === 'increment') {
+                        cart[idx].quantity += 1;
+                    } else if (action === 'decrement') {
+                        if (cart[idx].quantity > 1) {
+                            cart[idx].quantity -= 1;
+                        } else {
+                            cart.splice(idx, 1);
+                        }
+                    } else if (action === 'remove') {
+                        cart.splice(idx, 1);
+                    }
+                    saveCart();
+                    renderCart();
+                }
+            }
+        });
+
+        // Checkout button
+        document.getElementById('cart-checkout-btn')?.addEventListener('click', () => {
+            let total = 0;
+            cart.forEach(item => {
+                const itemPriceValue = parsePriceValue(item.price);
+                total += itemPriceValue * item.quantity;
+            });
+            alert(`Checkout successful! Total Price: $${total.toFixed(2)}`);
+            cart = [];
+            saveCart();
+            renderCart();
+            closeCart();
+            window.location.href = withBase('/');
+        });
+    });
+</script>
+
+<style>
+    /* Subtle fade-in animation for newly added cart items */
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(4px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fadeIn {
+        animation: fadeIn 0.25s ease-out forwards;
+    }
+</style>

@@ -3,30 +3,24 @@ import Layout from "../layouts/Layout.astro";
 import Nav from "../components/Nav.astro";
 import Footer from "../components/Footer.astro";
 import { products } from "./shop/products.js";
-
-
-
+import { withBase } from "../lib/utils";
 
 ---
 
 <Layout title="Shop - All Products">
-    
-    
-    <main class="px-4 sm:px-8 py-16">
-  <div class="w-full h-20" >
-    <Nav logo="/images/digisign/ds1-black.png" />
-  </div>
+    <Nav logo="/images/digisign/ds1-black.webp" />
+    <main class="px-4 sm:px-8 py-4">
     <div class="max-w-7xl mx-auto space-y-8">
       {products.map((product) => (
         <div class="relative flex justify-center py-4">
           <a 
-            href={`/shop/${product.slug}`}
+            href={withBase(`/shop/${product.slug}`)}
             target={product.target || "_self"}
             rel={product.target ? "noopener noreferrer" : undefined}
             class="relative block w-full max-w-6xl group"
           >
             <img 
-              src={product.image} 
+              src={withBase(product.image)} 
               alt={product.title}
               class="w-full h-auto brightness-90 group-hover:brightness-95 transition duration-200"
             />

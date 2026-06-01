@@ -3,6 +3,7 @@ import Layout from "../../layouts/Layout.astro";
 import Nav from "../../components/Nav.astro";
 import Footer from "../../components/Footer.astro";
 import Gallery from "../../components/Gallery.astro";
+import { withBase } from "../../lib/utils";
 import {
   getPrintEntries,
   defaultPaperInfo,
@@ -30,7 +31,7 @@ const allowSelection = hasSizes && !(print.cta?.disabled ?? false);
 ---
 
 <Layout title={`${print.title} — PM Prints`}>
-	<Nav logo="/images/digisign/ds1-black.png" />
+	<Nav logo="/images/digisign/ds1-black.webp" />
 	<main class="px-4 sm:px-8 py-10">
 		<section class="max-w-7xl mx-auto">
 			<Gallery images={galleryImages}>
@@ -116,6 +117,11 @@ const allowSelection = hasSizes && !(print.cta?.disabled ?? false);
 							print.cta.disabled ? "cursor-not-allowed opacity-60" : ""
 						}`}
 						disabled={print.cta.disabled ?? false}
+						data-cart-add
+						data-product-title={print.title}
+						data-product-image={galleryImages ? galleryImages[0].src : ''}
+						data-product-price={print.edition?.priceSummary}
+						data-product-select-id={selectId}
 					>
 						{print.cta.label}
 					</button>
@@ -133,7 +139,7 @@ const allowSelection = hasSizes && !(print.cta?.disabled ?? false);
 					<div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
 						{supportingImages.map((image) => (
 							<figure class="aspect-[3/4] overflow-hidden bg-gray-100">
-								<img src={image.src} alt={image.alt ?? ""} class="h-full w-full object-cover" />
+								<img src={withBase(image.src)} alt={image.alt ?? ""} class="h-full w-full object-cover" />
 							</figure>
 						))}
 					</div>

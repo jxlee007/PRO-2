@@ -1,34 +1,35 @@
 ---
 // Gallery.astro - an interactive Astro island (initialization runs on client)
 // Props: images: Array<{src:string, thumb:string, alt?:string}>
+import { withBase } from '../lib/utils';
 const uid = Math.random().toString(36).slice(2, 9);
 export interface Props {
   images?: { src: string; thumb?: string; alt?: string }[];
 }
 export const imagesDefault = [
   {
-    src: '/images/thumb-gallery/ford-gt-pm800.jpg',
-    thumb: '/images/thumb-gallery/ford-gt-pm800%20small.jpg',
+    src: '/images/thumb-gallery/ford-gt/ford-gt-pm800.webp',
+    thumb: '/images/thumb-gallery/ford-gt/ford-gt-pm800%20small.webp',
     alt: 'Ford GT sunset print in frame',
   },
   {
-    src: '/images/thumb-gallery/fordgt-wideall.jpg',
-    thumb: '/images/thumb-gallery/fordgt-wideall%20small.jpg',
+    src: '/images/thumb-gallery/ford-gt/fordgt-wideall.webp',
+    thumb: '/images/thumb-gallery/ford-gt/fordgt-wideall%20small.webp',
     alt: 'Ford GT triptych displayed on wall',
   },
   {
-    src: '/images/thumb-gallery/fordgt-cularge-solo.jpg',
-    thumb: '/images/thumb-gallery/fordgt-cusmall-solo.jpg',
+    src: '/images/thumb-gallery/ford-gt/fordgt-cularge-solo.webp',
+    thumb: '/images/thumb-gallery/ford-gt/fordgt-cusmall-solo.webp',
     alt: 'Ford GT large format detail',
   },
   {
-    src: '/images/thumb-gallery/fordgt-cumed-solo.jpg',
-    thumb: '/images/thumb-gallery/fordgt-cumed-solo%20small.jpg',
+    src: '/images/thumb-gallery/ford-gt/fordgt-cumed-solo.webp',
+    thumb: '/images/thumb-gallery/ford-gt/fordgt-cumed-solo%20small.webp',
     alt: 'Ford GT medium crop print detail',
   },
   {
-    src: '/images/thumb-gallery/fordgt-widelarge-solo.jpg',
-    thumb: '/images/thumb-gallery/fordgt-widelarge-solo%20small.jpg',
+    src: '/images/thumb-gallery/ford-gt/fordgt-widelarge-solo.webp',
+    thumb: '/images/thumb-gallery/ford-gt/fordgt-widelarge-solo%20small.webp',
     alt: 'Ford GT wide angle hero shot print',
   },
 ];
@@ -52,7 +53,7 @@ const { images = imagesDefault } = Astro.props as Props & { images?: typeof imag
           <div class="swiper-wrapper">
             {images.map((img) => (
               <div class="swiper-slide flex items-center justify-center bg-gray-100">
-                <img src={img.src} alt={img.alt ?? ''} class="object-contain w-full h-[40vh] md:h-[50vh]" />
+                <img src={withBase(img.src)} alt={img.alt ?? ''} class="object-contain w-full h-[40vh] md:h-[50vh]" />
               </div>
             ))}
           </div>
@@ -61,11 +62,11 @@ const { images = imagesDefault } = Astro.props as Props & { images?: typeof imag
           <button class="swiper-button-prev text-white/90"></button>
         </div>
 
-        <div class="mt-4 swiper mySwiper grid grid-cols-4 gap-2">
-          <div class="swiper-wrapper col-span-4 flex gap-2">
+        <div thumbsSlider="" class="mt-4 swiper mySwiper overflow-hidden">
+          <div class="swiper-wrapper">
             {images.map((img) => (
-              <div class="swiper-slide shrink-0 w-20 h-16 overflow-hidden border border-gray-200">
-                <img src={img.thumb ?? img.src} alt={img.alt ?? ''} class="w-full h-full object-cover" />
+              <div class="swiper-slide cursor-pointer overflow-hidden">
+                <img src={withBase(img.thumb ?? img.src)} alt={img.alt ?? ''} class="w-full h-16 object-cover" />
               </div>
             ))}
           </div>
@@ -74,3 +75,16 @@ const { images = imagesDefault } = Astro.props as Props & { images?: typeof imag
     </div>
   </div>
 </div>
+
+<style is:global>
+  .mySwiper .swiper-slide {
+    opacity: 0.4;
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+  .mySwiper .swiper-slide-thumb-active {
+    opacity: 1;
+    border: 2px solid #000;
+  }
+</style>

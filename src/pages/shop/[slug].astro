@@ -3,6 +3,7 @@ import Layout from "../../layouts/Layout.astro";
 import Nav from "../../components/Nav.astro";
 import Footer from "../../components/Footer.astro";
 import { products } from "./products.js";
+import { withBase } from "../../lib/utils";
 
 export async function getStaticPaths() {
 	return products.map((p) => ({
@@ -15,12 +16,12 @@ const { product } = Astro.props;
 ---
 
 <Layout title={product.title}>
-    <Nav logo="/images/digisign/ds1-black.png" />
-    <main class="px-4 sm:px-8 py-8 ">
+    <Nav logo="/images/digisign/ds1-black.webp" />
+    <main class="px-4 sm:px-8 py-4 ">
         <!-- Hero banner (use product.layout.hero if available) -->
         <section class="mt-6">
             <div class="relative max-w-6xl mx-auto overflow-hidden">
-                <img src={product.layout && product.layout.hero ? product.layout.hero : product.image} alt={product.title} class="w-full h-80 sm:h-96 lg:h-[420px] object-cover brightness-90" />
+                <img src={product.layout && product.layout.hero ? withBase(product.layout.hero) : withBase(product.image)} alt={product.title} class="w-full h-80 sm:h-96 lg:h-[420px] object-cover brightness-90" />
                 <div class="absolute inset-0 flex items-center">
                     <div class="px-6 sm:px-12">
                         {product.layout && product.title ? (
@@ -66,7 +67,7 @@ const { product } = Astro.props;
                                         <article class="text-center space-y-3 transition-transform duration-200 group-hover:-translate-y-1">
                                             <div class="w-full flex justify-center">
                                                 <div class="w-full max-w-xs sm:max-w-sm md:max-w-md sm:h-64 md:h-72 lg:h-80 flex items-center justify-center overflow-hidden rounded-lg bg-white shadow-sm ring-1 ring-transparent group-hover:ring-gray-200">
-                                                    <img src={encodeURI(item.image)} alt={item.title} class="w-full h-full object-cover" />
+                                                    <img src={withBase(encodeURI(item.image))} alt={item.title} class="w-full h-full object-cover" />
                                                 </div>
                                             </div>
                                             <h3 class="text-md text-gray-700">{item.title}</h3>
@@ -75,7 +76,7 @@ const { product } = Astro.props;
 
                                     return item.href ? (
                                         <a
-                                            href={item.href}
+                                            href={withBase(item.href)}
                                             class="group block focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-gray-900"
                                         >
                                             {content}

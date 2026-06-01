@@ -2,10 +2,11 @@
 import Layout from "../layouts/Layout.astro";
 import Nav from "../components/Nav.astro";
 import Footer from "../components/Footer.astro";
+import { withBase } from "../lib/utils";
 ---
 
 <Layout title="Contact">
-  <Nav logo="/images/digisign/ds1-black.png" />
+  <Nav logo="/images/digisign/ds1-black.webp" />
 
   <main class="px-6 sm:px-12 py-16">
     <div class="max-w-6xl mx-auto">
@@ -14,12 +15,12 @@ import Footer from "../components/Footer.astro";
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
         <!-- Left: image -->
         <div class="w-full">
-          <img src="/images/contact.jpg" alt="Contact" class="w-full h-auto object-cover rounded-sm shadow-sm" />
+          <img src={withBase("/images/contact.webp")} alt="Contact" class="w-full h-auto object-cover rounded-sm shadow-sm" />
         </div>
 
         <!-- Right: form -->
         <div>
-          <form class="space-y-6" onsubmit="event.preventDefault()">
+          <form class="space-y-6" onsubmit="event.preventDefault(); alert('Message sent successfully! We will get back to you shortly.'); this.reset();">
             <fieldset class="p-0 m-0 border-0 space-y-4">
               <legend class="sr-only">Purpose of email</legend>
 
