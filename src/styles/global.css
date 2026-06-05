@@ -2,8 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
-
-
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
+}
 /*
   LOCAL SELF-HOSTED FONT (optional)
 
@@ -418,26 +420,32 @@ nav {
 }
 
 #side {
-    display: flex;
+    display: none;
     justify-content: center;
     align-items: flex-end;
     cursor: pointer;
 }
 
+@media (min-width: 768px) {
+    #side {
+        display: flex;
+    }
+}
+
 #side a {
     display: flex;
-    padding: .7vw .5vw;
     text-decoration: none;
-    color: #bdbdbd;
     text-transform: uppercase;
-    font-size: .9vw;
     letter-spacing: .1vw;
     font-weight: 400;
     cursor: pointer;
 }
 
-#side a:hover {
-    color: lightgrey;
+@media (min-width: 768px) {
+    #side a {
+        padding: .7vw .5vw;
+        font-size: .9vw;
+    }
 }
 
 /* Hide scrollbar helper: add the class `no-scrollbar` to any scrollable element

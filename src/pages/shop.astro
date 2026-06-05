@@ -17,25 +17,24 @@ import { withBase } from "../lib/utils";
             href={withBase(`/shop/${product.slug}`)}
             target={product.target || "_self"}
             rel={product.target ? "noopener noreferrer" : undefined}
-            class="relative block w-full max-w-6xl group"
+            class="relative block w-full max-w-6xl h-48 sm:h-64 md:h-72 lg:h-80 xl:h-96 overflow-hidden rounded-sm group"
           >
             <img 
               src={withBase(product.image)} 
               alt={product.title}
-              class="w-full h-auto brightness-90 group-hover:brightness-95 transition duration-200"
+              class="w-full h-full object-cover brightness-75 group-hover:brightness-90 group-hover:scale-105 transition-all duration-700 ease-out"
             />
             
             <!-- Text overlay -->
-            <div class="absolute top-[40%] left-[10%] pointer-events-none">
-              <h1 class="text-white font-extrabold uppercase text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-tight px-4 sm:px-8">
+            <div class="absolute inset-0 flex flex-col justify-center px-8 sm:px-16 md:px-24 bg-black/15 pointer-events-none">
+              <h1 class="text-white font-extrabold uppercase text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl leading-tight drop-shadow-md">
                 {product.title}
               </h1>
-            </div>
-            
-            <div class="absolute top-[60%] left-[13.5%] pointer-events-none">
-              <h5 class="text-white uppercase text-xs sm:text-sm md:text-base lg:text-lg font-light tracking-wide">
-                {product.subtitle}
-              </h5>
+              {product.subtitle ? (
+                <h5 class="text-white/90 uppercase text-xs sm:text-sm md:text-base font-light tracking-widest mt-2 drop-shadow-sm">
+                  {product.subtitle}
+                </h5>
+              ) : null}
             </div>
           </a>
         </div>

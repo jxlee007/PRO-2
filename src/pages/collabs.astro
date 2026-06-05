@@ -64,21 +64,21 @@ const collabs = [
 			<div class="space-y-10">
 				{
 					collabs.map((c) => (
-						<article class="relative">
-							<a href={c.href} class="block group">
+						<article class="relative h-48 sm:h-64 md:h-72 lg:h-80 xl:h-96 overflow-hidden rounded-sm">
+							<a href={c.href} class="block w-full h-full group">
 								<img
 									src={c.image}
 									alt={c.title}
-									class="w-full h-auto object-cover brightness-90 group-hover:brightness-95 transition"
+									class="w-full h-full object-cover brightness-75 group-hover:brightness-90 group-hover:scale-105 transition-all duration-700 ease-out"
 								/>
 
-								<div class="absolute inset-0 flex flex-col justify-start">
-									<h1 class="mt-36 ml-16 text-white font-extrabold uppercase text-3xl sm:text-4xl md:text-5xl lg:text-6xl leading-tight drop-shadow-lg">
+								<div class="absolute inset-0 flex flex-col justify-center px-8 sm:px-16 md:px-24 bg-black/15 pointer-events-none">
+									<h1 class="text-white font-extrabold uppercase text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl leading-tight drop-shadow-lg">
 										{c.title.split("\n").map((s, i) => (
 											<span class="block">{s}</span>
 										))}
 									</h1>
-									<p class="mt-auto mb-8 ml-16 text-white uppercase text-xs sm:text-sm font-light tracking-widest">
+									<p class="text-white/90 uppercase text-xs sm:text-sm md:text-base font-light tracking-widest mt-2 drop-shadow-sm">
 										{c.subtitle}
 									</p>
 								</div>

@@ -44,7 +44,7 @@ const logo = withBase("/images/digisign/ds1-white.webp");
       </button>
 
       <!-- Desktop Navigation (Hidden on Mobile/Tablet) -->
-      <div id="side" class="hidden md:flex items-end space-x-4">
+      <div id="side" class="hidden sm:flex items-end space-x-4">
         <div id="list" class="relative">
           <Link
             href="/shop"
@@ -226,3 +226,13 @@ const logo = withBase("/images/digisign/ds1-white.webp");
   <Parallax />
   <Footer />
 </Layout>
+
+<style is:global>
+  #side a {
+    color: #ffffff;
+  }
+  #form input[type=email] {
+    border-color: #ffffff;
+  }
+</style>
+
